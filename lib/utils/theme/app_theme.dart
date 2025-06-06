@@ -9,10 +9,10 @@ class AppTheme {
       onSecondary: AppColors.lightOnSecondaryColor,
       surface: AppColors.lightTextColor,
       inverseSurface: AppColors.lightInverseTextColor,
-    ),
+    ),    
     appBarTheme: AppBarTheme(backgroundColor: AppColors.lightSecondaryColor , foregroundColor: AppColors.lightTextColor,),
     scaffoldBackgroundColor: AppColors.lightSecondaryColor,
-    shadowColor: AppColors.lightPrimaryColor,
+    shadowColor: AppColors.lightPrimaryColor,        
   );
   static final darkTheme = ThemeData(
     colorScheme: ColorScheme.light(

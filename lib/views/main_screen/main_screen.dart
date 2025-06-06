@@ -97,25 +97,33 @@ class _MainScreenState extends State<MainScreen> {
           },
           items: [
             BottomNavigationBarItem(
-              icon: BottomBarItemWidget(iconData: Icons.home_outlined),
+              icon: BottomBarItemWidget(
+                iconPath: 'assets/icons/home_outlined.png',
+              ),
               activeIcon: BottomBarItemWidget(
-                iconData: Icons.home,
+                iconPath: 'assets/icons/home.png',
                 isActiveIcon: true,
               ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: BottomBarItemWidget(iconData: Icons.score_outlined),
+              icon: BottomBarItemWidget(
+                iconPath: 'assets/icons/score_outlined.png',
+                width: 25,
+              ),
               activeIcon: BottomBarItemWidget(
-                iconData: Icons.score,
+                iconPath: 'assets/icons/score.png',
                 isActiveIcon: true,
+                width: 25,
               ),
               label: 'ATS',
             ),
             BottomNavigationBarItem(
-              icon: BottomBarItemWidget(iconData: Icons.person_outline),
+              icon: BottomBarItemWidget(
+                iconPath: 'assets/icons/user_outlined.png',
+              ),
               activeIcon: BottomBarItemWidget(
-                iconData: Icons.person,
+                iconPath: 'assets/icons/user.png',
                 isActiveIcon: true,
               ),
               label: 'ATS',
@@ -128,12 +136,14 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class BottomBarItemWidget extends StatelessWidget {
-  final IconData iconData;
+  final String iconPath;
   final bool isActiveIcon;
+  final double width;
   const BottomBarItemWidget({
     super.key,
-    required this.iconData,
+    required this.iconPath,
     this.isActiveIcon = false,
+    this.width = 20,
   });
 
   @override
@@ -146,11 +156,11 @@ class BottomBarItemWidget extends StatelessWidget {
                 : Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(9),
       ),
-      padding: EdgeInsets.all(7.0),
-      child: Icon(
-        iconData,
+      padding: EdgeInsets.all(width == 20 ? 8.0 : 6.0),
+      child: Image.asset(
+        iconPath,
         color: Theme.of(context).colorScheme.primary,
-        size: isActiveIcon ? 26 : 25,
+        width: width,
       ),
     );
   }

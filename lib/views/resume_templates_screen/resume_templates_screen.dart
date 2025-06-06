@@ -3,6 +3,7 @@ import 'package:craft_ai/views/resume_customization_screen/resume_customization_
 import 'package:craft_ai/views/resume_templates_screen/resume_templates_screen_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ResumeTemplatesScreen extends StatelessWidget {
   final List<ResumeTemplate> templates;
@@ -50,14 +51,15 @@ class ResumeTemplatesScreen extends StatelessWidget {
                             elevation: 1,
                             shadowColor: Theme.of(context).colorScheme.primary,
                           ),
-                          Chip(
+                          Chip(                            
                             label: Text(
-                              'Traditional',
+                              'Traditional',                              
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.surface,
                                 fontFamily: 'Urbanist',
                               ),
                             ),
+                            // color: ,
                             backgroundColor:
                                 Theme.of(context).colorScheme.onSecondary,
                             side: BorderSide(
@@ -141,12 +143,14 @@ class ResumeTemplatesScreen extends StatelessWidget {
                     children: [
                       for (var i = 0; i < 5; i++)
                         GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
+                          onTap: () async{
+                            var navigator = Navigator.of(context);
+                            String html = await rootBundle.loadString('assets/resumes/resume_3.html');
+                            navigator.push(
                               CupertinoPageRoute(
                                 builder:
                                     (context) =>
-                                        ResumeCustomizationScreen(),
+                                        ResumeCustomizationScreen(html: html,),
                               ),
                             );
                           },

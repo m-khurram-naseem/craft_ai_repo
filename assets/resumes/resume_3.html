@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Resume</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body style="width: 794px; font-family: Arial, sans-serif; margin: 40px; color: #333">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 30px">
+      <h1 style="margin-bottom: 5px">{{name}}</h1>
+      <p style="margin: 0">Email: {{email}} | {{phoneNo}}</p>
+      <p style="margin: 0">LinkedIn: {{linkedInLink}}</p>
+    </div>
+
+    <!-- Summary -->
+    <div style="margin-bottom: 20px">
+      <h2 style="border-bottom: 1px solid #aaa; padding-bottom: 5px">
+        Professional Summary
+      </h2>
+      <p>
+        {{summary}}
+      </p>
+    </div>
+
+    <!-- Experience -->
+    <div style="margin-bottom: 20px">
+      <h2 style="border-bottom: 1px solid #aaa; padding-bottom: 5px">
+        Experience
+      </h2>
+      <h3 style="margin: 5px 0">{{jobDesignation}} – {{enterpriseName}}</h3>
+      <p style="margin: 0"><em>{{startDate}} – {{endDate}}</em></p>
+      <ul style="margin: 5px 0 15px 20px">
+        <li>{{description1}}</li>
+        <li>{{description2}}</li>
+        <li>{{description3}}</li>
+      </ul>
+      <h3 style="margin: 5px 0">{{jobDesignation}} – {{enterpriseName}}</h3>
+      <p style="margin: 0"><em>{{startDate}} – {{endDate}}</em></p>
+      <ul style="margin: 5px 0 15px 20px">
+        <li>{{description1}}</li>
+        <li>{{description2}}</li>
+        <li>{{description3}}</li>
+      </ul>
+    </div>
+
+    <!-- Education -->
+    <div style="margin-bottom: 20px">
+      <h2 style="border-bottom: 1px solid #aaa; padding-bottom: 5px">
+        Education
+      </h2>
+      <h3 style="margin: 5px 0">{{degreeName}}</h3>
+      <p style="margin: 0">{{instituteName}}, {{startDate}} – {{endDate}}</p>
+    </div>
+
+    <!-- Skills -->
+    <div>
+      <h2 style="border-bottom: 1px solid #aaa; padding-bottom: 5px">Skills</h2>
+      <p>Flutter, Dart, Firebase, REST APIs, Git, UI/UX, Agile</p>
+    </div>
+  </body>
+</html>

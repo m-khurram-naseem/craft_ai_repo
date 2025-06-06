@@ -1,8 +1,21 @@
+import 'dart:async';
+
+import 'package:craft_ai/views/ats_score_screen/widgets/ats_floating_btns.dart';
+import 'package:craft_ai/views/ats_score_screen/widgets/ats_score_job_description_field.dart';
+import 'package:craft_ai/views/ats_score_screen/widgets/ats_score_report_sheet.dart';
+import 'package:craft_ai/views/ats_score_screen/widgets/ats_score_texts.dart';
+import 'package:craft_ai/views/ats_score_screen/widgets/ats_score_upload_resume_btn.dart';
 import 'package:flutter/material.dart';
 
-class AtsScoreScreen extends StatelessWidget {
+class AtsScoreScreen extends StatefulWidget {
   const AtsScoreScreen({super.key});
 
+  @override
+  State<AtsScoreScreen> createState() => _AtsScoreScreenState();
+}
+
+class _AtsScoreScreenState extends State<AtsScoreScreen> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,156 +23,43 @@ class AtsScoreScreen extends StatelessWidget {
       body: Center(
         child: CustomScrollView(
           slivers: [
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  'Job Description',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Urbanist',
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              sliver: SliverToBoxAdapter(
-                child: TextFormField(
-                  maxLines: 10,
-                  minLines: 2,
-                  style: TextStyle(
-                    fontFamily: 'Urbanist',
-                    color: Theme.of(context).colorScheme.surface,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    hintText: 'Write job description here...',
-                    hintStyle: TextStyle(
-                      fontFamily: 'Urbanist',
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surface.withAlpha(130),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  'Resume Score',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Urbanist',
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  'Suggestions',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Urbanist',
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(childCount: 5, (
-                context,
-                index,
-              ) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 5,
-                  ),
-                  child: ListTile(
-                    tileColor: Theme.of(context).colorScheme.onSecondary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    leading: Icon(
-                      Icons.earbuds_sharp,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    title: Text(
-                      'Include details about team leadership, mentorship roles, or collaborative work environments.',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-
-                        fontFamily: 'Uranist',
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
+            // Job Description Portion
+            AtsScoreJobDescriptionText(),
+            AtsScoreJobDescriptionField(),
+            AtsScoreUploadResumeBtn(),
           ],
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FloatingActionButton.extended(
-            onPressed: () {},
-            heroTag: 1,
-            backgroundColor: Theme.of(context).colorScheme.onSecondary,
-            foregroundColor: Theme.of(context).colorScheme.surface,
-            elevation: 1,
-            icon: Icon(
-              Icons.workspaces_outlined,
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            label: Text(
-              'Select Resume',
-              style: TextStyle(
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w700,
-                color: Theme.of(context).colorScheme.surface,
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton.extended(
-            onPressed: () {},
-            heroTag: 2,
-            backgroundColor: Theme.of(context).colorScheme.onSecondary,
-            foregroundColor: Theme.of(context).colorScheme.surface,
-            elevation: 1,
-            icon: Icon(
-              Icons.upload_outlined,
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            label: Text(
-              'Upload Resume',
-              style: TextStyle(
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w700,
-                color: Theme.of(context).colorScheme.surface,
-              ),
-            ),
-          ),
-        ],
+      floatingActionButton: AtsFloatingBtns(
+        aiScoreOnTap: () {
+          setState(() {
+            isLoading = true;
+            Timer(Duration(seconds: 3), () {
+              setState(() {
+                isLoading = false;
+                showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              useSafeArea: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return DraggableScrollableSheet(
+                  expand: true,
+                  initialChildSize: 1,
+                  minChildSize: 1,
+                  maxChildSize: 1,
+                  builder: (context, scrollController) {
+                    return AtsScoreReportSheet(controller: scrollController);
+                  },
+                );
+              },
+            );
+              });
+            },);
+          });
+        },
+        apiScoreOnTap: () {},
+        isLoading: isLoading,
       ),
     );
   }
