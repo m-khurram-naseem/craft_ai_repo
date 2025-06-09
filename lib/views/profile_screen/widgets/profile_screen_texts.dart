@@ -1,10 +1,9 @@
+import 'package:craft_ai/models/education.dart';
+import 'package:craft_ai/models/user_data.dart';
+import 'package:craft_ai/models/work_experience.dart';
 import 'package:craft_ai/views/education_detail_screen/education_detail_screen.dart';
-import 'package:craft_ai/views/language_detail_screen/language_detail_screen.dart';
 import 'package:craft_ai/views/links_detail_screen/links_detail_screen.dart';
 import 'package:craft_ai/views/personal_info_edit_screen/personal_info_edit_screen.dart';
-import 'package:craft_ai/views/profile_screen/profile_screen.dart';
-import 'package:craft_ai/views/profile_screen/widgets/profile_screen_skills_grid.dart';
-import 'package:craft_ai/views/profile_screen/widgets/profile_screen_tools_grid.dart';
 import 'package:craft_ai/views/skills_detail_screen/skills_detail_screen.dart';
 import 'package:craft_ai/views/tools_detail_screen/tools_detail_screen.dart';
 import 'package:craft_ai/views/work_experience_detail_screen/work_experience_detail_screen.dart';
@@ -59,7 +58,8 @@ class ProfileScreenText extends StatelessWidget {
 class ProfileScreenPersonalInfoText extends StatelessWidget {
   static const title = 'Personal Information';
   final bool isEdit;
-  const ProfileScreenPersonalInfoText({super.key, required this.isEdit});
+  final UserData userData;
+  const ProfileScreenPersonalInfoText({super.key, required this.isEdit , required this.userData});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class ProfileScreenPersonalInfoText extends StatelessWidget {
       onEditTap:
           () => Navigator.of(context).push(
             CupertinoPageRoute(
-              builder: (context) => PersonalInfoEditScreen(title: title),
+              builder: (context) => PersonalInfoEditScreen(title: title , userData: userData,),
             ),
           ),
     );
@@ -78,18 +78,18 @@ class ProfileScreenPersonalInfoText extends StatelessWidget {
 
 class ProfileScreenWorkExperienceText extends StatelessWidget {
   static const title = 'Work Experience';
-  final bool isEdit;
-  const ProfileScreenWorkExperienceText({super.key, required this.isEdit});
+  final List<WorkExperience> workExperiences;
+  const ProfileScreenWorkExperienceText({super.key, required this.workExperiences});
 
   @override
   Widget build(BuildContext context) {
     return ProfileScreenText(
       text: title,
-      isEdit: isEdit,
+      isEdit: workExperiences.isNotEmpty,
       onEditTap:
           () => Navigator.of(context).push(
             CupertinoPageRoute(
-              builder: (context) => WorkExperienceDetailScreen(title: title),
+              builder: (context) => WorkExperienceDetailScreen(title: title ,workExperiences: workExperiences,),
             ),
           ),
     );
@@ -98,18 +98,18 @@ class ProfileScreenWorkExperienceText extends StatelessWidget {
 
 class ProfileScreenEducationText extends StatelessWidget {
   static const title = 'Education';
-  final bool isEdit;
-  const ProfileScreenEducationText({super.key, required this.isEdit});
+  final List<Education> education;
+  const ProfileScreenEducationText({super.key, required this.education});
 
   @override
   Widget build(BuildContext context) {
     return ProfileScreenText(
       text: title,
-      isEdit: isEdit,
+      isEdit: education.isNotEmpty,
       onEditTap:
           () => Navigator.of(context).push(
             CupertinoPageRoute(
-              builder: (context) => EducationDetailScreen(title: title),
+              builder: (context) => EducationDetailScreen(title: title , education: education,),
             ),
           ),
     );
@@ -118,14 +118,14 @@ class ProfileScreenEducationText extends StatelessWidget {
 
 class ProfileScreenSkillsText extends StatelessWidget {
   static const title = 'Skills';
-  final bool isEdit;
-  const ProfileScreenSkillsText({super.key, required this.isEdit});
+  final List<String> skills;
+  const ProfileScreenSkillsText({super.key, required this.skills});
 
   @override
   Widget build(BuildContext context) {
     return ProfileScreenText(
       text: title,
-      isEdit: isEdit,
+      isEdit: skills.isNotEmpty,
       onEditTap:
           () => Navigator.of(context).push(
             CupertinoPageRoute(
@@ -148,13 +148,15 @@ class ProfileScreenLanguagesText extends StatelessWidget {
       text: title,
       isEdit: isEdit,
       onEditTap:
-          () => Navigator.of(context).push(
-            CupertinoPageRoute(
-              builder:
-                  (context) =>
-                      LanguageDetailScreen(title: title, languages: languages),
-            ),
-          ),
+          () {
+            // Navigator.of(context).push(
+            // CupertinoPageRoute(
+            //   builder:
+            //       (context) =>
+            //           LanguageDetailScreen(title: title, languages: ),
+            // ),
+          // );
+          },
     );
   }
 }
@@ -181,14 +183,14 @@ class ProfileScreenLinksText extends StatelessWidget {
 
 class ProfileScreenToolsText extends StatelessWidget {
   static const title = 'Tools';
-  final bool isEdit;
-  const ProfileScreenToolsText({super.key, required this.isEdit});
+  final List<String> tools;
+  const ProfileScreenToolsText({super.key, required this.tools});
 
   @override
   Widget build(BuildContext context) {
     return ProfileScreenText(
       text: title,
-      isEdit: isEdit,
+      isEdit: tools.isNotEmpty,
       onEditTap:
           () => Navigator.of(context).push(
             CupertinoPageRoute(

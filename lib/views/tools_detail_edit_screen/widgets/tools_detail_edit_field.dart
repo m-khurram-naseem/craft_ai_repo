@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ToolsDetailEditField extends StatelessWidget {
-  const ToolsDetailEditField({super.key});
+  final TextEditingController controller;
+  const ToolsDetailEditField({super.key , required this.controller,});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,8 @@ class ToolsDetailEditField extends StatelessWidget {
         child: TextFormField(
           maxLines: 1,
           minLines: 1,
-          style: TextStyle(
+          controller: controller,
+          style: TextStyle(            
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,
             fontWeight: FontWeight.w700,

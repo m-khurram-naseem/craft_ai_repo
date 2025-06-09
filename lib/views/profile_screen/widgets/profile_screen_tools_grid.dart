@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreenToolsGrid extends StatelessWidget {
-  const ProfileScreenToolsGrid({super.key});
+  final List<String> tools;
+  const ProfileScreenToolsGrid({super.key , required this.tools});
 
   @override
   Widget build(BuildContext context) {
+    var updatedTools = [...tools];
+    if(updatedTools.length.isOdd){
+      updatedTools.add('');
+    }
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 12),
       sliver: SliverGrid(
         delegate: SliverChildListDelegate([
-          for (var i = 0; i < tools.length; i++)
+          for (var i = 0; i < updatedTools.length; i++)
             ProfileScreenToolsTile(
-              skillName: tools[i],
+              skillName: updatedTools[i],
               index: i,
-              noOfSkills: tools.length,
+              noOfTools: updatedTools.length,
             ),
         ]),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -28,11 +33,11 @@ class ProfileScreenToolsGrid extends StatelessWidget {
 
 class ProfileScreenToolsTile extends StatelessWidget {
   final String skillName;
-  final int noOfSkills, index;
+  final int noOfTools, index;
   const ProfileScreenToolsTile({
     super.key,
     required this.skillName,
-    required this.noOfSkills,
+    required this.noOfTools,
     required this.index,
   });
 
@@ -43,8 +48,8 @@ class ProfileScreenToolsTile extends StatelessWidget {
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(index == 0 ? 15 : 0),
           topRight: Radius.circular(index == 1 ? 15 : 0),
-          bottomLeft: Radius.circular(index == tools.length - 2 ? 15 : 0),
-          bottomRight: Radius.circular(index == tools.length - 1 ? 15 : 0),
+          bottomLeft: Radius.circular(index == noOfTools - 2 ? 15 : 0),
+          bottomRight: Radius.circular(index == noOfTools - 1 ? 15 : 0),
         ),
       ),
       tileColor: Theme.of(context).colorScheme.onSecondary,
@@ -67,14 +72,3 @@ class ProfileScreenToolsTile extends StatelessWidget {
     );
   }
 }
-
-var tools = [
-  'Android Studio',
-  'VS Code',
-  'IntelliJ',
-  'Pycharm',
-  'TensorFlow Playground',
-  'Jupyter Notebook',
-  'Anaconda',
-  '',
-];

@@ -27,7 +27,8 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
 
   @override
   void initState() {
-    super.initState();
+    super.initState();        
+
     controller = WebViewController();
     controller.setJavaScriptMode(JavaScriptMode.unrestricted);
     html = widget.html;
@@ -112,7 +113,7 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
           title: Text('Name'),
           actions: [
             GestureDetector(
-              onTap: () async {                
+              onTap: () async {
                 if (animationController.status == AnimationStatus.completed) {
                   setState(() {
                     showWebView = !showWebView;
@@ -163,11 +164,27 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
                   child: Stack(
                     alignment: Alignment.bottomLeft,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          borderRadiusAnimation.value,
+                      Container(
+                        decoration: BoxDecoration(
+                          border:
+                          // animationController.status ==
+                          //         AnimationStatus.completed
+                          // ?
+                          Border.all(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            width: 5,
+                          ),
+                          // : Border.all(width: 0.0),
+                          borderRadius: BorderRadius.circular(
+                            borderRadiusAnimation.value,
+                          ),
                         ),
-                        child: WebViewWidget(controller: controller),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            borderRadiusAnimation.value,
+                          ),
+                          child: WebViewWidget(controller: controller),
+                        ),
                       ),
                       if (animationController.status ==
                           AnimationStatus.completed)
@@ -209,13 +226,15 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
                 //   context,
                 // ).showMaterialBanner(ResumeCustomizationBanner(context: context));
                 var navigator = Navigator.of(context);
-                var direcotry = await getApplicationDocumentsDirectory();                
+                var direcotry = await getApplicationDocumentsDirectory();
                 await FlutterHtmlToPdf.convertFromHtmlContent(
                   html,
                   direcotry.path,
                   'resume_4',
                 );
-                navigator..pop()..pop();
+                navigator
+                  ..pop()
+                  ..pop();
               },
               backgroundColor: Theme.of(context).colorScheme.onSecondary,
               label: Text(

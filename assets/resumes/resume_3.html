@@ -2,12 +2,23 @@
 <html>
   <head>
     <title>Simple Resume</title>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8" />    
+    <style class="style">
+    /* nameStart */
+      #name{        
+        color: red;
+        font-weight: bold;
+        font-style: italic;                
+      }
+      /* nameEnd */
+    </style>
   </head>
   <body style="width: 794px; font-family: Arial, sans-serif; margin: 40px; color: #333">
     <!-- Header -->
     <div style="text-align: center; margin-bottom: 30px">
-      <h1 style="margin-bottom: 5px">{{name}}</h1>
+      <!-- nameStart -->
+      <h1 id="name" style="margin-bottom: 5px; color: red;">{{name}}</h1>
+      <!-- nameEnd -->
       <p style="margin: 0">Email: {{email}} | {{phoneNo}}</p>
       <p style="margin: 0">LinkedIn: {{linkedInLink}}</p>
     </div>
@@ -22,8 +33,8 @@
       </p>
     </div>
 
-    <!-- Experience -->
-    <div style="margin-bottom: 20px">
+    <!-- experienceStart -->
+    <!-- <div style="margin-bottom: 20px">
       <h2 style="border-bottom: 1px solid #aaa; padding-bottom: 5px">
         Experience
       </h2>
@@ -41,7 +52,8 @@
         <li>{{description2}}</li>
         <li>{{description3}}</li>
       </ul>
-    </div>
+    </div> -->
+    <!-- experienceEnd -->
 
     <!-- Education -->
     <div style="margin-bottom: 20px">

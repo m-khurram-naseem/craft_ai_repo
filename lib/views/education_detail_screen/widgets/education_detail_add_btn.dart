@@ -1,9 +1,9 @@
-import 'package:craft_ai/views/education_detail_edit_screen/education_detail_edit_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class EducationDetailAddBtn extends StatelessWidget {
-  const EducationDetailAddBtn({super.key});
+  final void Function() onPressed;
+  const EducationDetailAddBtn({super.key , required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +12,7 @@ class EducationDetailAddBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder:
-                    (context) => EducationDetailEditScreen(isUpdate: false),
-              ),
-            );
-          },
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,

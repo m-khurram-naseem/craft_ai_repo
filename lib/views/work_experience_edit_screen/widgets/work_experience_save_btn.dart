@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class WorkExperienceSaveBtn extends StatelessWidget {
-  const WorkExperienceSaveBtn({super.key});
+  final void Function() onPressed;
+  const WorkExperienceSaveBtn({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -10,11 +11,15 @@ class WorkExperienceSaveBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,
-          icon: Image.asset('assets/icons/save.png' , width: 23 , color: Theme.of(context).colorScheme.primary,),
+          icon: Image.asset(
+            'assets/icons/save.png',
+            width: 23,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           label: Text(
             'Save Experience',
             style: TextStyle(

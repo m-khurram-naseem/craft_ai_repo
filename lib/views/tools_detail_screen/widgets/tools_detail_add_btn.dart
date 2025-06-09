@@ -1,9 +1,9 @@
-import 'package:craft_ai/views/tools_detail_edit_screen/tools_detail_edit_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class ToolsDetailAddBtn extends StatelessWidget {
-  const ToolsDetailAddBtn({super.key});
+  final void Function() onPressed;
+  const ToolsDetailAddBtn({super.key , required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +12,7 @@ class ToolsDetailAddBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => ToolsDetailEditScreen(isUpdate: false),
-              ),
-            );
-          },
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,

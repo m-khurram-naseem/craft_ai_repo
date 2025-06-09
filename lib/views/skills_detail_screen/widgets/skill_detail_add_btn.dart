@@ -1,9 +1,9 @@
-import 'package:craft_ai/views/skill_detail_edit_screen/skill_detail_edit_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class SkillDetailAddBtn extends StatelessWidget {
-  const SkillDetailAddBtn({super.key});
+  final void Function() onPressed;
+  const SkillDetailAddBtn({super.key , required this.onPressed,});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +12,7 @@ class SkillDetailAddBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => SkillDetailEditScreen(isUpdate: false),
-              ),
-            );
-          },
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,

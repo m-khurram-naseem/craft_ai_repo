@@ -26,18 +26,12 @@ class SkillDetailTile extends StatelessWidget {
       sliver: SliverToBoxAdapter(
         child: ListTile(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                isTopRounded
-                    ? BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    )
-                    : isBottomRounded
-                    ? BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    )
-                    : BorderRadius.zero,
+            borderRadius: BorderRadius.only(
+              topLeft: isTopRounded ? Radius.circular(15) : Radius.zero,
+              topRight: isTopRounded ? Radius.circular(15) : Radius.zero,
+              bottomLeft: isBottomRounded ? Radius.circular(15) : Radius.zero,
+              bottomRight: isBottomRounded ? Radius.circular(15) : Radius.zero,
+            ),
           ),
           trailing: GestureDetector(onTap: onEditTap, child: trailing),
           leading: Icon(

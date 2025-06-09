@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class PersonalInfoField extends StatelessWidget {
   final String hint;
-  const PersonalInfoField({super.key, required this.hint});
+  final TextEditingController controller;
+  const PersonalInfoField({super.key, required this.hint , required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,7 @@ class PersonalInfoField extends StatelessWidget {
         child: TextFormField(
           maxLines: 1,
           minLines: 1,
+          controller: controller,
           style: TextStyle(
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,

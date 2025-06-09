@@ -2,66 +2,94 @@ import 'package:craft_ai/views/profile_screen/widgets/profile_screen_tile.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreenPersonalInformationDesignationTile extends StatelessWidget {
-  const ProfileScreenPersonalInformationDesignationTile({super.key});
+  final String designation;
+  const ProfileScreenPersonalInformationDesignationTile({
+    super.key,
+    required this.designation,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (designation.isEmpty) {
+      return SliverToBoxAdapter(child: SizedBox());
+    }
     return ProfileScreenTile(
       leading: Image.asset(
         'assets/icons/manager.png',
         width: 23,
         color: Theme.of(context).colorScheme.primary,
       ),
-      title: 'Software Engineer',
+      title: designation,
       isTopRounded: true,
     );
   }
 }
 
 class ProfileScreenPersonalInformationEmailTile extends StatelessWidget {
-  const ProfileScreenPersonalInformationEmailTile({super.key});
+  final String email;
+  const ProfileScreenPersonalInformationEmailTile({
+    super.key,
+    required this.email,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (email.isEmpty) {
+      return SliverToBoxAdapter(child: SizedBox());
+    }
     return ProfileScreenTile(
       leading: Image.asset(
         'assets/icons/email.png',
         width: 23,
         color: Theme.of(context).colorScheme.primary,
       ),
-      title: 'developerkhurramnaseem@gmail.com',
+      title: email,
     );
   }
 }
 
 class ProfileScreenPersonalInformationPhoneNoTile extends StatelessWidget {
-  const ProfileScreenPersonalInformationPhoneNoTile({super.key});
+  final String phoneNo;
+  const ProfileScreenPersonalInformationPhoneNoTile({
+    super.key,
+    required this.phoneNo,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (phoneNo.isEmpty) {
+      return SliverToBoxAdapter(child: SizedBox());
+    }
     return ProfileScreenTile(
       leading: Image.asset(
         'assets/icons/phone.png',
         width: 23,
         color: Theme.of(context).colorScheme.primary,
       ),
-      title: '+92-301-7731831',
+      title: phoneNo,
     );
   }
 }
 
 class ProfileScreenPersonalInformationAddressTile extends StatelessWidget {
-  const ProfileScreenPersonalInformationAddressTile({super.key});
+  final String address;
+  const ProfileScreenPersonalInformationAddressTile({
+    super.key,
+    required this.address,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (address.isEmpty) {
+      return SliverToBoxAdapter(child: SizedBox());
+    }
     return ProfileScreenTile(
       leading: Image.asset(
         'assets/icons/location.png',
         width: 23,
         color: Theme.of(context).colorScheme.primary,
       ),
-      title: 'Bahawalpur, Pakistan',
+      title: address,
       isBottomRounded: true,
     );
   }

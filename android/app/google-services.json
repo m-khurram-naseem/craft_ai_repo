@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "261938529683",
+    "project_id": "craftai-f1888",
+    "storage_bucket": "craftai-f1888.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261938529683:android:dbe8ed06c322bdd42f1466",
+        "android_client_info": {
+          "package_name": "com.craftai.craftai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdiJzYW5fo5MNBkhh8v20D3l-OVakwSJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

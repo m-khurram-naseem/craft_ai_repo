@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreenSkillsGrid extends StatelessWidget {
-  const ProfileScreenSkillsGrid({super.key});
+  final List<String> skills;
+  const ProfileScreenSkillsGrid({super.key, required this.skills});
 
   @override
   Widget build(BuildContext context) {
+    var updatedSkills = [...skills];
+    if (updatedSkills.length.isOdd) {
+      updatedSkills.add('');
+    }
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 12),
       sliver: SliverGrid(
         delegate: SliverChildListDelegate([
-          for (var i = 0; i < skills.length; i++)
+          for (var i = 0; i < updatedSkills.length; i++)
             ProfileScreenSkillsTile(
-              skillName: skills[i],
+              skillName: updatedSkills[i],
               index: i,
-              noOfSkills: skills.length,
+              noOfSkills: updatedSkills.length,
             ),
         ]),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -43,8 +48,8 @@ class ProfileScreenSkillsTile extends StatelessWidget {
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(index == 0 ? 15 : 0),
           topRight: Radius.circular(index == 1 ? 15 : 0),
-          bottomLeft: Radius.circular(index == skills.length - 2 ? 15 : 0),
-          bottomRight: Radius.circular(index == skills.length - 1 ? 15 : 0),
+          bottomLeft: Radius.circular(index == noOfSkills - 2 ? 15 : 0),
+          bottomRight: Radius.circular(index == noOfSkills - 1 ? 15 : 0),
         ),
       ),
       tileColor: Theme.of(context).colorScheme.onSecondary,
@@ -67,14 +72,3 @@ class ProfileScreenSkillsTile extends StatelessWidget {
     );
   }
 }
-
-var skills = [
-  'Java',
-  'Android',
-  'Dart',
-  'Flutter',
-  'Python',
-  'TensorFlow',
-  'Keras',
-  '',
-];

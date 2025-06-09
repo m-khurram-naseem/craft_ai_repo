@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ProfileScreenLanguagesTile extends StatelessWidget {
   final String language;
-  final String fluency;
+  final int fluency;
   final bool isTopRounded;
   final bool isBottomRounded;
   const ProfileScreenLanguagesTile({
@@ -19,7 +19,7 @@ class ProfileScreenLanguagesTile extends StatelessWidget {
     return ProfileScreenTile(
       title: language,
       trailing: Text(
-        fluency,
+        getFluencyFromIndex(fluency),
         style: TextStyle(
           color: Theme.of(context).colorScheme.primary.withAlpha(150),
           fontFamily: 'Urbanist',
@@ -31,4 +31,15 @@ class ProfileScreenLanguagesTile extends StatelessWidget {
       onTap: () {},
     );
   }
+}
+
+
+String getFluencyFromIndex(int i){
+  return switch(i){
+    0 => 'Beginner' , 
+    1 => 'Proficient',
+    2 => 'Fluent',
+    3 => 'Native',
+    _ => '',
+  };
 }

@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-class WorkExperienceTile extends StatelessWidget {   
+class WorkExperienceTile extends StatelessWidget {
   final Widget? trailing;
   final String title;
   final String? subtitle;
   final bool isTopRounded;
   final bool isBottomRounded;
   final void Function()? onEditTap;
-  const WorkExperienceTile({super.key,
+  const WorkExperienceTile({
+    super.key,
     this.trailing,
     required this.title,
     this.subtitle,
     this.onEditTap,
     this.isTopRounded = false,
-    this.isBottomRounded = false,});
+    this.isBottomRounded = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +24,14 @@ class WorkExperienceTile extends StatelessWidget {
       sliver: SliverToBoxAdapter(
         child: ListTile(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                isTopRounded
-                    ? BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    )
-                    : isBottomRounded
-                    ? BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    )
-                    : BorderRadius.zero,
+            borderRadius: BorderRadius.only(
+              topLeft: isTopRounded ? Radius.circular(15) : Radius.zero,
+              topRight: isTopRounded ? Radius.circular(15) : Radius.zero,
+              bottomLeft: isBottomRounded ? Radius.circular(15) : Radius.zero,
+              bottomRight: isBottomRounded ? Radius.circular(15) : Radius.zero,
+            ),
           ),
-          trailing: GestureDetector(onTap: onEditTap,child: trailing),
+          trailing: GestureDetector(onTap: onEditTap, child: trailing),
           subtitle:
               subtitle != null
                   ? Text(
@@ -49,7 +45,7 @@ class WorkExperienceTile extends StatelessWidget {
                     ),
                   )
                   : null,
-          tileColor: Theme.of(context).colorScheme.onSecondary,                    
+          tileColor: Theme.of(context).colorScheme.onSecondary,
           title: Text(
             title,
             style: TextStyle(
@@ -61,5 +57,5 @@ class WorkExperienceTile extends StatelessWidget {
         ),
       ),
     );
-    }
+  }
 }

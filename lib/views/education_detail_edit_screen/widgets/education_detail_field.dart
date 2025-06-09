@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 class EducationDetailField extends StatelessWidget {
   final String hint;
   final bool isDateField;
+  final TextEditingController controller;
+  final DateTime? selectedDate;
+  final void Function(DateTime value)? onChanged;
   const EducationDetailField({
     super.key,
     required this.hint,
     this.isDateField = false,
+    required this.controller,
+    this.onChanged,
+    this.selectedDate,
   });
 
   @override
@@ -17,6 +23,7 @@ class EducationDetailField extends StatelessWidget {
         child: TextFormField(
           maxLines: 1,
           minLines: 1,
+          controller: controller,
           style: TextStyle(
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,
@@ -49,7 +56,14 @@ class EducationDetailField extends StatelessWidget {
                           context: context,
                           firstDate: DateTime(2000),
                           lastDate: DateTime.now(),
-                        );
+                          currentDate: selectedDate,
+                        ).then((value) {
+                          if (value != null) {
+                            if (onChanged != null) {
+                              onChanged!(value);
+                            }
+                          }
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

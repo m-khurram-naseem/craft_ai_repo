@@ -1,9 +1,12 @@
+import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
 import 'package:craft_ai/utils/comman_widgets/no_data_found_widget.dart';
 import 'package:craft_ai/views/skills_detail_screen/widgets/skill_detail_tile.dart';
 import 'package:craft_ai/views/tools_detail_edit_screen/tools_detail_edit_screen.dart';
 import 'package:craft_ai/views/tools_detail_screen/widgets/tools_detail_add_btn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ToolsDetailScreen extends StatelessWidget {
   final String title;
@@ -16,7 +19,6 @@ class ToolsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // skills.removeWhere((element) => element.isEmpty);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -26,58 +28,39 @@ class ToolsDetailScreen extends StatelessWidget {
       ),
       body: Center(
         child:
-            title == 'Tools'
+            tools.isEmpty
                 ? NoDataFoundWidget(errorMessage: 'No Tools Found')
                 : Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
-                    CustomScrollView(
-                      slivers: [
-                        for (
-                          var i = 0;
-                          i <
-                              tools
-                                  .where((element) => element.isNotEmpty)
-                                  .length;
-                          i++
-                        )
-                          SkillDetailTile(
-                            title: tools[i],
-                            onEditTap: () {
-                              Navigator.of(context).push(
-                                CupertinoPageRoute(
-                                  builder:
-                                      (context) =>
-                                          ToolsDetailEditScreen(isUpdate: true),
+                    ToolsDetailList(),
+                    ToolsDetailAddBtn(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder:
+                                (context) => ToolsDetailEditScreen(
+                                  isUpdate: false,
+                                  tools: tools,
                                 ),
-                              );
-                            },
-                            trailing: Icon(
-                              Icons.edit_outlined,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            isTopRounded: i == 0,
-                            isBottomRounded:
-                                i ==
-                                tools
-                                        .where((element) => element.isNotEmpty)
-                                        .length -
-                                    1,
                           ),
-                      ],
+                        );
+                      },
                     ),
-                    ToolsDetailAddBtn(),
                   ],
                 ),
       ),
       floatingActionButton:
-          title == 'Tools'
+          tools.isEmpty
               ? FloatingActionButton.extended(
                 onPressed: () {
                   Navigator.of(context).push(
                     CupertinoPageRoute(
                       builder:
-                          (context) => ToolsDetailEditScreen(isUpdate: false),
+                          (context) => ToolsDetailEditScreen(
+                            isUpdate: false,
+                            tools: tools,
+                          ),
                     ),
                   );
                 },
@@ -99,6 +82,57 @@ class ToolsDetailScreen extends StatelessWidget {
                 ),
               )
               : null,
+    );
+  }
+}
+
+class ToolsDetailList extends ConsumerWidget {
+  const ToolsDetailList({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var state = ref.watch(profileStreamProvider);
+    return state.when(
+      data: (userData) {
+        return CustomScrollView(
+          slivers: [
+            for (var i = 0; i < userData.tools.length; i++)
+              SkillDetailTile(
+                title: userData.tools[i],
+                onEditTap: () {
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder:
+                          (context) => ToolsDetailEditScreen(
+                            isUpdate: true,
+                            tools: userData.tools,
+                            currentIndex: i,
+                          ),
+                    ),
+                  );
+                },
+                trailing: Icon(
+                  Icons.edit_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                isTopRounded: i == 0,
+                isBottomRounded: i == userData.tools.length - 1,
+              ),
+          ],
+        );
+      },
+      loading: () {
+        return Center(
+          child: LoadingAnimationWidget.threeRotatingDots(
+            color: Theme.of(context).colorScheme.primary,
+            size: 25,
+          ),
+        );
+      },
+      error: (error, stackTrace) {
+        return SizedBox();
+      },
+      skipLoadingOnRefresh: true,
     );
   }
 }

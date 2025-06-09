@@ -1,9 +1,9 @@
-import 'package:craft_ai/views/work_experience_edit_screen/work_expreicne_edit_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class WorkExperienceAddBtn extends StatelessWidget {
-  const WorkExperienceAddBtn({super.key});
+  final void Function() onPressed;
+  const WorkExperienceAddBtn({super.key , required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +12,7 @@ class WorkExperienceAddBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => WorkExpreicneEditScreen(isUpdate: false),
-              ),
-            );
-          },
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,

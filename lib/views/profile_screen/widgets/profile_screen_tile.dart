@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class ProfileScreenTile extends StatelessWidget {
@@ -21,23 +23,18 @@ class ProfileScreenTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log(isBottomRounded.toString());
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 12),
       sliver: SliverToBoxAdapter(
         child: ListTile(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                isTopRounded
-                    ? BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    )
-                    : isBottomRounded
-                    ? BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    )
-                    : BorderRadius.zero,
+            borderRadius: BorderRadius.only(
+              topLeft: isTopRounded ? Radius.circular(15) : Radius.zero,
+              topRight: isTopRounded ? Radius.circular(15) : Radius.zero,
+              bottomLeft: isBottomRounded ? Radius.circular(15) : Radius.zero,
+              bottomRight: isBottomRounded ? Radius.circular(15) : Radius.zero,
+            ),
           ),
           trailing: trailing,
           subtitle:

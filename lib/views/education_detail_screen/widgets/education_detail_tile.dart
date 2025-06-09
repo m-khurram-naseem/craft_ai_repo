@@ -7,12 +7,15 @@ class EducationDetailTile extends StatelessWidget {
   final bool isTopRounded;
   final bool isBottomRounded;
   final void Function()? onEditTap;
-  const EducationDetailTile({super.key,this.trailing,
+  const EducationDetailTile({
+    super.key,
+    this.trailing,
     required this.title,
     this.subtitle,
     this.onEditTap,
     this.isTopRounded = false,
-    this.isBottomRounded = false,});
+    this.isBottomRounded = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +24,14 @@ class EducationDetailTile extends StatelessWidget {
       sliver: SliverToBoxAdapter(
         child: ListTile(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                isTopRounded
-                    ? BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    )
-                    : isBottomRounded
-                    ? BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    )
-                    : BorderRadius.zero,
+            borderRadius: BorderRadius.only(
+              topLeft: isTopRounded ? Radius.circular(15) : Radius.zero,
+              topRight: isTopRounded ? Radius.circular(15) : Radius.zero,
+              bottomLeft: isBottomRounded ? Radius.circular(15) : Radius.zero,
+              bottomRight: isBottomRounded ? Radius.circular(15) : Radius.zero,
+            ),
           ),
-          trailing: GestureDetector(onTap: onEditTap,child: trailing),
+          trailing: GestureDetector(onTap: onEditTap, child: trailing),
           subtitle:
               subtitle != null
                   ? Text(
@@ -48,7 +45,7 @@ class EducationDetailTile extends StatelessWidget {
                     ),
                   )
                   : null,
-          tileColor: Theme.of(context).colorScheme.onSecondary,                    
+          tileColor: Theme.of(context).colorScheme.onSecondary,
           title: Text(
             title,
             style: TextStyle(

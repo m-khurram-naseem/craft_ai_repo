@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SkillDetailEditField extends StatelessWidget {
-  const SkillDetailEditField({super.key});
+  final TextEditingController controller;
+  const SkillDetailEditField({super.key , required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +12,7 @@ class SkillDetailEditField extends StatelessWidget {
         child: TextFormField(
           maxLines: 1,
           minLines: 1,
+          controller: controller,
           style: TextStyle(
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,

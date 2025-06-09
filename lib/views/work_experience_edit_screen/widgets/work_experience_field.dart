@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 class WorkExperienceField extends StatelessWidget {
   final String hint;
   final bool isDateField;
+  final TextEditingController controller;
+  final void Function(DateTime value)? onChanged;
+  final DateTime? selectedDate;
   const WorkExperienceField({
     super.key,
     required this.hint,
     this.isDateField = false,
+    required this.controller,
+    this.onChanged,
+    this.selectedDate,
   });
 
   @override
@@ -15,8 +21,10 @@ class WorkExperienceField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12),
       sliver: SliverToBoxAdapter(
         child: TextFormField(
+          controller: controller,
           maxLines: 1,
           minLines: 1,
+          readOnly: isDateField,
           style: TextStyle(
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,
@@ -49,7 +57,23 @@ class WorkExperienceField extends StatelessWidget {
                           context: context,
                           firstDate: DateTime(2000),
                           lastDate: DateTime.now(),
-                        );
+                          currentDate: selectedDate ,
+                          builder: (context, child) {
+                            return Theme(
+                              data: ThemeData(
+                                primaryColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                              child: child!,
+                            );
+                          },
+                        ).then((value) {
+                          if (value != null) {
+                            if (onChanged != null) {
+                              onChanged!(value);
+                            }
+                          }
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
