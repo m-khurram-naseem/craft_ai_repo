@@ -1,13 +1,17 @@
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/models/language.dart';
 import 'package:craft_ai/utils/comman_widgets/no_data_found_widget.dart';
 import 'package:craft_ai/views/language_detail_edit_screen/language_detail_edit_screen.dart';
-import 'package:craft_ai/views/language_detail_screen/widgets/language_detail_add_btn.dart';
-import 'package:craft_ai/views/language_detail_screen/widgets/language_detail_tile.dart';
+import 'package:craft_ai/views/language_detail_screen/widgets/language_detail_floating_btn.dart';
+import 'package:craft_ai/views/language_detail_screen/widgets/language_detail_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class LanguageDetailScreen extends StatelessWidget {
+class LanguageDetailScreen extends ConsumerWidget {
   final String title;
-  final Map<String, String> languages;
+  final List<Language> languages;
   const LanguageDetailScreen({
     super.key,
     required this.title,
@@ -15,80 +19,54 @@ class LanguageDetailScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          title,
-          style: TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: Center(
-        child:
-            title == 'Languages'
-                ? NoDataFoundWidget(errorMessage: 'No Language Found')
-                : Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    CustomScrollView(
-                      slivers: [
-                        for (var i = 0; i < languages.keys.length; i++)
-                          LanguageDetailTile(
-                            title: languages.keys.toList()[i],
-                            subtitle: languages.values.toList()[i],
-                            onEditTap: () {
-                              Navigator.of(context).push(
-                                CupertinoPageRoute(
-                                  builder:
-                                      (context) => LanguageDetailEditScreen(
-                                        isUpdate: true,
-                                      ),
-                                ),
-                              );
-                            },
-                            trailing: Icon(
-                              Icons.edit_outlined,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            isTopRounded: i == 0,
-                            isBottomRounded: i == languages.length - 1,
-                          ),
-                      ],
-                    ),
-                    LanguageDetailAddBtn(),
-                  ],
-                ),
-      ),
-      floatingActionButton:
-          title == 'Languages'
-              ? FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder:
-                          (context) =>
-                              LanguageDetailEditScreen(isUpdate: false),
-                    ),
-                  );
-                },
-                backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                foregroundColor: Theme.of(context).colorScheme.surface,
-                heroTag: 'Languages',
-                elevation: 1,
-                icon: Icon(
-                  Icons.add,
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                label: Text(
-                  'Add Language',
-                  style: TextStyle(
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.surface,
-                  ),
-                ),
-              )
-              : null,
+  Widget build(BuildContext context, WidgetRef ref) {
+    var state = ref.watch(profileStreamProvider);
+    return state.when(
+      data: (data) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: Center(
+            child:
+                data.languages.isEmpty
+                    ? NoDataFoundWidget(errorMessage: 'No Language Found')
+                    : LanguageDetailList(languages: data.languages),
+          ),
+          floatingActionButton:
+              data.languages.isEmpty
+                  ? LanguageDetailFloatingBtn(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder:
+                              (context) => LanguageDetailEditScreen(
+                                languages: languages,
+                              ),
+                        ),
+                      );
+                    },
+                  )
+                  : null,
+        );
+      },
+      error: (error, stackTrace) {
+        return SizedBox();
+      },
+      loading: () {
+        return Center(
+          child: LoadingAnimationWidget.threeRotatingDots(
+            color: Theme.of(context).colorScheme.primary,
+            size: 25,
+          ),
+        );
+      },
     );
   }
 }

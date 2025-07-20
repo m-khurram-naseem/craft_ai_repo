@@ -1,4 +1,5 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/models/skill.dart';
 import 'package:craft_ai/utils/comman_widgets/no_data_found_widget.dart';
 import 'package:craft_ai/views/skill_detail_edit_screen/skill_detail_edit_screen.dart';
 import 'package:craft_ai/views/skills_detail_screen/widgets/skill_detail_add_btn.dart';
@@ -10,7 +11,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SkillsDetailScreen extends StatelessWidget {
   final String title;
-  final List<String> skills;
+  final List<Skill> skills;
   const SkillsDetailScreen({
     super.key,
     required this.title,
@@ -93,7 +94,7 @@ class SkillsDetailList extends ConsumerWidget {
                       slivers: [
                         for (var i = 0; i < userData.skills.length; i++)
                           SkillDetailTile(
-                            title: userData.skills[i],
+                            title: userData.skills[i].name,
                             onEditTap: () {
                               Navigator.of(context).push(
                                 CupertinoPageRoute(

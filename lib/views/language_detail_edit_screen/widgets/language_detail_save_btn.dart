@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LanguageDetailSaveBtn extends StatelessWidget {
-  const LanguageDetailSaveBtn({super.key});
+  final VoidCallback onPressed;
+  const LanguageDetailSaveBtn({super.key , required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,7 @@ class LanguageDetailSaveBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,

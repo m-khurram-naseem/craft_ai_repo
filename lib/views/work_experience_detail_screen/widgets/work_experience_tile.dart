@@ -30,7 +30,7 @@ class WorkExperienceTile extends StatelessWidget {
               bottomLeft: isBottomRounded ? Radius.circular(15) : Radius.zero,
               bottomRight: isBottomRounded ? Radius.circular(15) : Radius.zero,
             ),
-          ),
+          ),          
           trailing: GestureDetector(onTap: onEditTap, child: trailing),
           subtitle:
               subtitle != null

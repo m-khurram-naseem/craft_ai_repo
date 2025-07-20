@@ -1,9 +1,9 @@
-import 'package:craft_ai/views/links_detail_edit_screen/links_detail_edit_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class LinksDetailAddBtn extends StatelessWidget {
-  const LinksDetailAddBtn({super.key});
+  final VoidCallback onPressed;
+  const LinksDetailAddBtn({super.key , required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +12,7 @@ class LinksDetailAddBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => LinksDetailEditScreen(isUpdate: false),
-              ),
-            );
-          },
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,

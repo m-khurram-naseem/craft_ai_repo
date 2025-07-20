@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LanguageDetailEditField extends StatelessWidget {
-  const LanguageDetailEditField({super.key});
+  final TextEditingController controller;
+  const LanguageDetailEditField({super.key , required this.controller,});
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +12,7 @@ class LanguageDetailEditField extends StatelessWidget {
         child: TextFormField(
           maxLines: 1,
           minLines: 1,
+          controller: controller,
           style: TextStyle(
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,

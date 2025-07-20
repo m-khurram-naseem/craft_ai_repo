@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+
+class ResumeCustomizationBaseTile extends StatelessWidget {
+  final Widget? leading;
+  final Widget? trailing;
+  final String title;
+  final String? subtitle;
+  final bool isTopRounded;
+  final bool isBottomRounded;  
+  const ResumeCustomizationBaseTile({super.key,    this.leading,
+    this.trailing,
+    required this.title,
+    this.subtitle,    
+    this.isTopRounded = false,
+    this.isBottomRounded = false,});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      sliver: SliverToBoxAdapter(
+        child: ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: isTopRounded ? Radius.circular(15) : Radius.zero,
+              topRight: isTopRounded ? Radius.circular(15) : Radius.zero,
+              bottomLeft: isBottomRounded ? Radius.circular(15) : Radius.zero,
+              bottomRight: isBottomRounded ? Radius.circular(15) : Radius.zero,
+            ),
+          ),
+          trailing: trailing,
+          subtitle:
+              subtitle != null
+                  ? Text(
+                    subtitle ?? '',
+                    style: TextStyle(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withAlpha(150),
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  )
+                  : null,
+          tileColor: Theme.of(context).colorScheme.onSecondary,
+          leading: leading,          
+          title: Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontFamily: 'Urbanist',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

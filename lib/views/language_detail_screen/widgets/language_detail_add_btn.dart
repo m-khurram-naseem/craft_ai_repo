@@ -1,9 +1,9 @@
-import 'package:craft_ai/views/language_detail_edit_screen/language_detail_edit_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class LanguageDetailAddBtn extends StatelessWidget {
-  const LanguageDetailAddBtn({super.key});
+  final VoidCallback onPressed;
+  const LanguageDetailAddBtn({super.key , required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +12,7 @@ class LanguageDetailAddBtn extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width,
         child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => LanguageDetailEditScreen(isUpdate: false),
-              ),
-            );
-          },
+          onPressed: onPressed,
           backgroundColor: Theme.of(context).colorScheme.onSecondary,
           foregroundColor: Theme.of(context).colorScheme.surface,
           elevation: 1,

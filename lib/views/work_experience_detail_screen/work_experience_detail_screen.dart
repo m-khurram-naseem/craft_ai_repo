@@ -1,4 +1,4 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
 import 'package:craft_ai/models/work_experience.dart';
 import 'package:craft_ai/utils/comman_widgets/no_data_found_widget.dart';
 import 'package:craft_ai/views/work_experience_detail_screen/widgets/work_experience_add_btn.dart';

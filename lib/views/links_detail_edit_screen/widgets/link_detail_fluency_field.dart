@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LinkDetailFluencyField extends StatelessWidget {
-  const LinkDetailFluencyField({super.key});
+class LinkDetailNameField extends StatelessWidget {
+  final ValueChanged<int?> onChanged;
+  final int initialValue;
+  const LinkDetailNameField({super.key , required this.onChanged , required this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +13,9 @@ class LinkDetailFluencyField extends StatelessWidget {
         child: DropdownButtonFormField(
           items: [
             DropdownMenuItem(
-              value: 'l',
+              value: 0,
               child: Text(
-                'Linked In',
+                getLinkNameFromIndex(0),
                 style: TextStyle(
                   fontFamily: 'Urbanist',
                   fontWeight: FontWeight.bold,
@@ -22,9 +24,9 @@ class LinkDetailFluencyField extends StatelessWidget {
               ),
             ),
             DropdownMenuItem(
-              value: 'i',
+              value: 1,
               child: Text(
-                'Instagram',
+                getLinkNameFromIndex(1),
                 style: TextStyle(
                   fontFamily: 'Urbanist',
                   fontWeight: FontWeight.bold,
@@ -33,9 +35,9 @@ class LinkDetailFluencyField extends StatelessWidget {
               ),
             ),
             DropdownMenuItem(
-              value: 'f',
+              value: 2,
               child: Text(
-                'Facebook',
+                getLinkNameFromIndex(2),
                 style: TextStyle(
                   fontFamily: 'Urbanist',
                   fontWeight: FontWeight.bold,
@@ -44,9 +46,9 @@ class LinkDetailFluencyField extends StatelessWidget {
               ),
             ),
             DropdownMenuItem(
-              value: 'p',
+              value: 3,
               child: Text(
-                'Personal Website',
+                getLinkNameFromIndex(3),
                 style: TextStyle(
                   fontFamily: 'Urbanist',
                   fontWeight: FontWeight.bold,
@@ -57,8 +59,8 @@ class LinkDetailFluencyField extends StatelessWidget {
           ],
           dropdownColor: Theme.of(context).colorScheme.onSecondary,
           isExpanded: true,
-          value: 'l',
-          onChanged: (value) {},
+          value: initialValue,
+          onChanged: onChanged,
           style: TextStyle(
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,
@@ -90,3 +92,12 @@ class LinkDetailFluencyField extends StatelessWidget {
   }
 }
 
+String getLinkNameFromIndex(int index){
+  return switch(index){
+    0 => 'Linked In',
+    1 => 'Github',
+    2 => 'Instagram',
+    3 => 'Personal Website',
+    _ => '',
+  };
+}

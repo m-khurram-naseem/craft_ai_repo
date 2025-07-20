@@ -1,5 +1,6 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
-import 'package:craft_ai/controllers/profile_state_notifier/profile_states.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_states.dart';
+import 'package:craft_ai/models/tool.dart';
 import 'package:craft_ai/views/tools_detail_edit_screen/widgets/tools_detail_edit_field.dart';
 import 'package:craft_ai/views/tools_detail_edit_screen/widgets/tools_detail_edit_text.dart';
 import 'package:craft_ai/views/tools_detail_edit_screen/widgets/tools_detail_save_btn.dart';
@@ -9,7 +10,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ToolsDetailEditScreen extends ConsumerStatefulWidget {
   final bool isUpdate;
-  final List<String> tools;
+  final List<Tool> tools;
   final int? currentIndex;
   const ToolsDetailEditScreen({
     super.key,
@@ -32,7 +33,7 @@ class _ToolsDetailEditScreenState extends ConsumerState<ToolsDetailEditScreen> {
     super.initState();
     String? currentTool;
     if (widget.currentIndex != null) {
-      currentTool = widget.tools[widget.currentIndex!];
+      currentTool = widget.tools[widget.currentIndex!].name;
     }
     toolController = TextEditingController(text: currentTool);
   }
@@ -81,6 +82,26 @@ class _ToolsDetailEditScreenState extends ConsumerState<ToolsDetailEditScreen> {
           widget.isUpdate ? 'Update Tool' : 'Add Tool',
           style: TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.bold),
         ),
+        actions: [
+          if (widget.currentIndex != null)
+            GestureDetector(
+              onTap: () {
+                var updatedTools = [...widget.tools];
+                updatedTools.remove(updatedTools[widget.currentIndex!]);
+                ref
+                    .read(profileStateNotifierProvider.notifier)
+                    .addTools(updatedTools);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  'assets/icons/delete.png',
+                  width: 22,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+        ],
       ),
       body: Center(
         child: Stack(
@@ -95,12 +116,12 @@ class _ToolsDetailEditScreenState extends ConsumerState<ToolsDetailEditScreen> {
             ToolsDetailSaveBtn(
               onPressed: () {
                 var notifier = ref.read(profileStateNotifierProvider.notifier);
-                List<String> updatedTools = widget.tools;
+                List<Tool> updatedTools = widget.tools;
                 if (widget.currentIndex == null) {
-                  updatedTools.add(toolController.text.trim());
+                  updatedTools.add(Tool(name: toolController.text.trim()));
                 } else {
                   updatedTools[widget.currentIndex!] =
-                      toolController.text.trim();
+                      Tool(name: toolController.text.trim());
                 }
                 notifier.addTools(updatedTools);
               },

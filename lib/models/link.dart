@@ -3,7 +3,7 @@ import 'dart:convert';
 class Link {
   static const urlKey = 'url' , nameKey = 'linkName';
   String url;
-  String name;  
+  int name;  
   Link({
     required this.url,
     required this.name,
@@ -11,7 +11,7 @@ class Link {
 
   Link copyWith({
     String? url,
-    String? name,
+    int? name,
   }) {
     return Link(
       url: url ?? this.url,
@@ -29,7 +29,7 @@ class Link {
   factory Link.fromMap(Map<String, dynamic> map) {
     return Link(
       url: (map[urlKey] ?? '') as String,
-      name: (map[nameKey] ?? '') as String,
+      name: (map[nameKey] ?? '') as int,
     );
   }
 

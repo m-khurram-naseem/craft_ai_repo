@@ -1,56 +1,42 @@
-
 import 'dart:convert';
 
 class Language {
   static const nameKey = 'languageName';
   static const proficiencyKey = 'proficiency';
   String name;
-  int proficiency;
-  Language({
-    required this.name,
-    required this.proficiency,
-  });
+  int fluency;
+  Language({required this.name, required this.fluency});
 
-  Language copyWith({
-    String? name,
-    int? proficiency,
-  }) {
-    return Language(
-      name: name ?? this.name,
-      proficiency: proficiency ?? this.proficiency,
-    );
+  Language copyWith({String? name, int? proficiency}) {
+    return Language(name: name ?? this.name, fluency: proficiency ?? fluency);
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      nameKey : name,
-      proficiencyKey : proficiency,
-    };
+    return <String, dynamic>{nameKey: name, proficiencyKey: fluency};
   }
 
   factory Language.fromMap(Map<String, dynamic> map) {
     return Language(
       name: (map[nameKey] ?? '') as String,
-      proficiency: (map[proficiencyKey] ?? 0) as int,
+      fluency: (map[proficiencyKey] ?? 0) as int,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Language.fromJson(String source) => Language.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Language.fromJson(String source) =>
+      Language.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'Language(name: $name, proficiency: $proficiency)';
+  String toString() => 'Language(name: $name, proficiency: $fluency)';
 
   @override
   bool operator ==(covariant Language other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.name == name &&
-      other.proficiency == proficiency;
+
+    return other.name == name && other.fluency == fluency;
   }
 
   @override
-  int get hashCode => name.hashCode ^ proficiency.hashCode;
+  int get hashCode => name.hashCode ^ fluency.hashCode;
 }

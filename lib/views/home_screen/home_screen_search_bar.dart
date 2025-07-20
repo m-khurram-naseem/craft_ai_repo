@@ -1,13 +1,16 @@
+import 'package:craft_ai/controllers/pdf_controller/pdf_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreenSearchBar extends StatefulWidget {
+class HomeScreenSearchBar extends ConsumerStatefulWidget {
   const HomeScreenSearchBar({super.key});
 
   @override
-  State<HomeScreenSearchBar> createState() => _HomeScreenSearchBarState();
+  ConsumerState<HomeScreenSearchBar> createState() =>
+      _HomeScreenSearchBarState();
 }
 
-class _HomeScreenSearchBarState extends State<HomeScreenSearchBar> {
+class _HomeScreenSearchBarState extends ConsumerState<HomeScreenSearchBar> {
   late FocusNode focusNode;
 
   @override
@@ -48,6 +51,9 @@ class _HomeScreenSearchBarState extends State<HomeScreenSearchBar> {
             fontWeight: FontWeight.w700,
           ),
         ),
+        onChanged: (value) {
+          ref.read(pdfStateProvider.notifier).updateList(value);
+        },
         hintStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(
             fontFamily: 'Urbanist',

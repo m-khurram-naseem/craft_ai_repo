@@ -1,21 +1,67 @@
-
+import 'package:craft_ai/controllers/pdf_controller/pdf_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/models/template.dart';
+import 'package:craft_ai/models/user_data.dart';
+import 'package:craft_ai/services/pdf_service/pdf_service.dart';
+import 'package:craft_ai/utils/template_utils/template_customization_util.dart';
+import 'package:craft_ai/views/resume_customization_screen/widgets/resume_customization_backscreen.dart';
+import 'package:craft_ai/views/resume_templates_screen/widgets/resume_chip_row.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ResumeCustomizationScreen extends StatefulWidget {
-  final String html;
-  const ResumeCustomizationScreen({super.key, required this.html});
+class ResumeCustomizationScreen extends ConsumerWidget {
+  final Template template;  
+  final UserData? userData;
+  const ResumeCustomizationScreen({super.key, required this.template , this.userData});
 
   @override
-  State<ResumeCustomizationScreen> createState() =>
-      _ResumeCustomizationScreenState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    if(userData != null){
+      return ResumeCustomizationScreenLoaded(
+            template: template,
+            userData: userData!,
+          );
+    }
+    var asyncValue = ref.watch(profileStreamProvider);
+    return asyncValue.when(
+      data:
+          (data) => ResumeCustomizationScreenLoaded(
+            template: template,
+            userData: data,
+          ),
+      loading: () {
+        return Center(
+          child: LoadingAnimationWidget.threeRotatingDots(
+            color: Theme.of(context).colorScheme.primary,
+            size: 25,
+          ),
+        );
+      },
+      error: (error, stackTrace) => const SizedBox(),
+    );
+  }
 }
 
-class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
+class ResumeCustomizationScreenLoaded extends ConsumerStatefulWidget {
+  final Template template;
+  final UserData userData;
+  const ResumeCustomizationScreenLoaded({
+    super.key,
+    required this.template,
+    required this.userData,
+  });
+
+  @override
+  ConsumerState<ResumeCustomizationScreenLoaded> createState() =>
+      _ResumeCustomizationScreenLoadedState();
+}
+
+class _ResumeCustomizationScreenLoadedState
+    extends ConsumerState<ResumeCustomizationScreenLoaded>
     with SingleTickerProviderStateMixin {
-  String html = '';
+  String editedHtml = '';
   late WebViewController controller;
   late AnimationController animationController;
   late Animation<double> sizeTransition;
@@ -27,16 +73,18 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
 
   @override
   void initState() {
-    super.initState();        
+    super.initState();
 
+    // Web View Controller
     controller = WebViewController();
     controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-    html = widget.html;
-    userData.forEach((key, value) {
-      html = html.replaceAll('{{$key}}', value);
-    });
-    controller.loadHtmlString(html);
+    editedHtml = TemplateCustomizationUtil.populateHtmlWithData(
+      widget.userData,
+      widget.template.html,
+    );
+    controller.loadHtmlString(editedHtml);
 
+    // Animation Controller
     animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -74,26 +122,6 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
     );
   }
 
-  var userData = {
-    'name': 'M. Khuram Naseem',
-    'email': 'developerkhurramnaseem@gmail.com',
-    'phoneNo': '+92-301-7731831',
-    'linkedInLink': 'https://www.linkedin.com/in/m-khuram-naseem',
-    'summary':
-        ' Flutter Developer with 2 years of hands-on experience, combining technical expertise with creative problem-solving to deliver high-quality mobile applications. Successfully developed and deployed 3 feature-rich apps while actively mentoring team members and resolving complex development challenges.',
-    'jobDesignation': 'Software Engineer',
-    'enterpriseName': 'Saya Coorporation Ltd.',
-    'startDate': 'Aug 2021',
-    'endDate': 'Present',
-    'description1':
-        'Improved app performance by 30% via optimization techniques',
-    'description2':
-        'Developed and maintained 10+ cross platform apps using Flutter',
-    'description3': 'Implemented RESTful APIs and Firebase Integration',
-    'degreeName': 'BS Software Engineering',
-    'instituteName': 'The Islamia University, Bahawalpur',
-  };
-
   @override
   void dispose() {
     animationController.dispose();
@@ -110,7 +138,7 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Name'),
+          title: Text(getChipNameFormValue(widget.template.type)),
           actions: [
             GestureDetector(
               onTap: () async {
@@ -149,14 +177,19 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
             ),
           ],
         ),
-
         body: Center(
           child: Stack(
             children: [
-              CustomScrollView(slivers: <Widget>[
-                
-              ],
-            ),
+              ResumeCustomizationBackscreen(
+                userData: widget.userData,
+                update: (userData) {
+                  editedHtml = TemplateCustomizationUtil.populateHtmlWithData(
+                    userData,
+                    widget.template.html,
+                  );
+                  controller.loadHtmlString(editedHtml);
+                },
+              ),
               if (showWebView)
                 ScaleTransition(
                   scale: sizeTransition,
@@ -166,15 +199,10 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          border:
-                          // animationController.status ==
-                          //         AnimationStatus.completed
-                          // ?
-                          Border.all(
+                          border: Border.all(
                             color: Theme.of(context).colorScheme.onSecondary,
                             width: 5,
                           ),
-                          // : Border.all(width: 0.0),
                           borderRadius: BorderRadius.circular(
                             borderRadiusAnimation.value,
                           ),
@@ -226,12 +254,12 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
                 //   context,
                 // ).showMaterialBanner(ResumeCustomizationBanner(context: context));
                 var navigator = Navigator.of(context);
-                var direcotry = await getApplicationDocumentsDirectory();
-                await FlutterHtmlToPdf.convertFromHtmlContent(
-                  html,
-                  direcotry.path,
-                  'resume_4',
+                await PdfService().savePdf(
+                  editedHtml,
+                  widget.template.html,
+                  DateTime.now().millisecondsSinceEpoch.toString(),
                 );
+                ref.read(pdfStateProvider.notifier).fetchAllPdfs();                
                 navigator
                   ..pop()
                   ..pop();
@@ -257,198 +285,3 @@ class _ResumeCustomizationScreenState extends State<ResumeCustomizationScreen>
     );
   }
 }
-
-// class WorkshopTimeBallAssist extends StatefulWidget {
-//   final Widget child;
-//   const WorkshopTimeBallAssist({super.key, required this.child});
-
-//   @override
-//   State<WorkshopTimeBallAssist> createState() => _WorkshopTimeBallAssistState();
-// }
-
-// class _WorkshopTimeBallAssistState extends State<WorkshopTimeBallAssist>
-//     with TickerProviderStateMixin {
-//   // Spring Animation Controller => Ball Movement Controller
-//   late AnimationController ballMovementController;
-//   late Animation<Alignment> _animation;
-//   // On Button tap Animation Controller
-//   late AnimationController ballTapAnimationController;
-
-//   // Constants
-//   static const _movementAnimationDuration = Duration(milliseconds: 200);
-//   static const _tapAnimationDuration = Duration(milliseconds: 500);
-//   static const _startAlignment = Alignment(1, -0.5);
-//   static const _springDescription = SpringDescription(
-//     mass: 30,
-//     stiffness: 1,
-//     damping: 1,
-//   );
-//   static const _backCircleOpaque = 0.8, _frontCircleOpaque = 0.8;
-//   static const _backCircleTransparent = 0.4, _frontCircleTransparent = 0.6;
-//   static const _forBottomHeightPercent = 0.8,
-//       _widthPercentHalf = 0.5,
-//       _forTopHeightPercent = 0.2,
-//       _heightPercentHalf = 0.5;
-
-//   // Instances
-//   double backOpacity = _backCircleTransparent,
-//       frontOpacity = _frontCircleTransparent;
-//   Alignment _currentAlignment = Alignment.center;
-//   Alignment _ballAlignment = Alignment.topRight;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _currentAlignment = _startAlignment;
-//     ballMovementController = AnimationController(
-//       vsync: this,
-//       duration: _movementAnimationDuration,
-//     )..addListener(() {
-//       setState(() {
-//         _currentAlignment = _animation.value;
-//       });
-//     });
-//     ballTapAnimationController = AnimationController(
-//       vsync: this,
-//       duration: _tapAnimationDuration,
-//     );
-//   }
-
-//   // Function that runs ball movement animation
-//   _runAnimation(Offset endOffset, Offset pixelsPerSecond, Size size) {
-//     _animation = alignmentAnimation(endOffset, size);
-//     _ballAlignment = ballAlignment(endOffset, size);
-//     final unitsPerSecondX = pixelsPerSecond.dx / size.width;
-//     final unitsPerSecondY = pixelsPerSecond.dy / size.height;
-//     final unitsPerSecond = Offset(unitsPerSecondX, unitsPerSecondY);
-//     final unitVelocity = unitsPerSecond.distance;
-
-//     final simulation = SpringSimulation(
-//       _springDescription,
-//       0,
-//       1,
-//       -unitVelocity,
-//     );
-
-//     ballMovementController.animateWith(simulation);
-//     ballMovementController.reset();
-//     ballMovementController.forward();
-//     Future.delayed(const Duration(seconds: 1), () {
-//       setState(() {
-//         backOpacity = _backCircleTransparent;
-//         frontOpacity = _frontCircleTransparent;
-//       });
-//     });
-//   }
-
-//   // Get us current alignment for ball based on ending offset of panUpdate and available size
-//   Animation<Alignment> alignmentAnimation(Offset endOffset, Size size) {
-//     var xDifference = endOffset.dx;
-//     var yDifference = endOffset.dy;
-//     Alignment endAlignment;
-//     if (xDifference < size.width * _widthPercentHalf) {
-//       if (yDifference > size.height * _forBottomHeightPercent) {
-//         endAlignment = const Alignment(-1, 0.8);
-//       } else if (yDifference < size.height * _forTopHeightPercent) {
-//         endAlignment = const Alignment(-1, -0.7);
-//       } else {
-//         endAlignment = Alignment(-1, _currentAlignment.y);
-//       }
-//     } else {
-//       // Ball animation
-//       if (yDifference > size.height * _forBottomHeightPercent) {
-//         endAlignment = const Alignment(1, 0.8);
-//       } else if (yDifference < size.height * _forTopHeightPercent) {
-//         endAlignment = const Alignment(1, -0.7);
-//       } else {
-//         endAlignment = Alignment(1, _currentAlignment.y);
-//       }
-//     }
-//     return ballMovementController.drive(
-//       AlignmentTween(begin: _currentAlignment, end: endAlignment),
-//     );
-//   }
-
-//   // Get us ball alignment on previous circle/container => which shows actual data
-//   Alignment ballAlignment(Offset endOffset, Size size) {
-//     var xDifference = endOffset.dx;
-//     var yDifference = endOffset.dy;
-//     if (xDifference < size.width * _widthPercentHalf) {
-//       return yDifference > size.height * _heightPercentHalf
-//           ? Alignment.bottomLeft
-//           : Alignment.topLeft;
-//     }
-//     return yDifference > size.height * _heightPercentHalf
-//         ? Alignment.bottomRight
-//         : Alignment.topRight;
-//   }
-
-//   // Gesture Detector events
-//   void _onPanDown(DragDownDetails details) {
-//     ballMovementController.stop();
-//   }
-
-//   void _onPanStart(DragStartDetails details) {
-//     setState(() {
-//       backOpacity = _backCircleOpaque;
-//       frontOpacity = _frontCircleOpaque;
-//     });
-//   }
-
-//   void _onPanEnd(DragEndDetails details) {
-//     final size = MediaQuery.sizeOf(context);
-//     _runAnimation(
-//       details.globalPosition,
-//       details.velocity.pixelsPerSecond,
-//       size,
-//     );
-//   }
-
-//   void _onPanUpdate(DragUpdateDetails details) {
-//     final size = MediaQuery.sizeOf(context);
-//     setState(() {
-//       _currentAlignment += Alignment(
-//         details.delta.dx / (size.width * _widthPercentHalf),
-//         details.delta.dy / (size.height * _heightPercentHalf),
-//       );
-//     });
-//   }
-
-//   void _onTap() {
-//     HapticFeedback.vibrate();
-//     if (ballTapAnimationController.isCompleted) {
-//       setState(() {
-//         ballTapAnimationController.reverse();
-//         backOpacity = _backCircleTransparent;
-//         frontOpacity = _frontCircleTransparent;
-//       });
-//     } else {
-//       setState(() {
-//         backOpacity = _backCircleOpaque;
-//         frontOpacity = _frontCircleOpaque;
-//         ballTapAnimationController.forward();
-//       });
-//     }
-//   }
-
-//   @override
-//   void dispose() {
-//     ballMovementController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: _onTap,
-//       onPanUpdate: _onPanUpdate,
-//       onPanDown: _onPanDown,
-//       onPanEnd: _onPanEnd,
-//       onPanStart: _onPanStart,
-//       child: Align(
-//         alignment: _currentAlignment,
-//         child: Stack(alignment: _ballAlignment, children: [widget.child]),
-//       ),
-//     );
-//   }
-// }

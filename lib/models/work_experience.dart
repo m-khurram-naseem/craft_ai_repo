@@ -1,16 +1,20 @@
-
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WorkExperience {
-  static const jobRoleKey = 'jobRole' , jobDescriptionKey = 'jobDescription' , companyNameKey = 'companyName' , companyAddressKey = 'companyAddress' , startDateKey = 'startDate' , endDateKey = 'endDate';
+  static const jobRoleKey = 'jobRole',
+      jobDescriptionKey = 'jobDescription',
+      companyNameKey = 'companyName',
+      companyAddressKey = 'companyAddress',
+      startDateKey = 'startDate',
+      endDateKey = 'endDate';
   String jobRole;
   String jobDescription;
   String companyName;
   String companyAddress;
   DateTime startDate;
-  DateTime endDate; 
+  DateTime endDate;
   WorkExperience({
     required this.jobRole,
     required this.jobDescription,
@@ -32,7 +36,7 @@ class WorkExperience {
       jobRole: jobRole ?? this.jobRole,
       jobDescription: jobDescription ?? this.jobDescription,
       companyName: companyName ?? this.companyName,
-      companyAddress: ccompanyAddress ?? this.companyAddress,
+      companyAddress: ccompanyAddress ?? companyAddress,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
     );
@@ -40,12 +44,12 @@ class WorkExperience {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      jobRoleKey : jobRole,
-      jobDescriptionKey : jobDescription,
-      companyNameKey : companyName,
-      companyAddressKey : companyAddress,
-      startDateKey : Timestamp.fromDate(startDate),
-      endDateKey : Timestamp.fromDate(endDate),
+      jobRoleKey: jobRole,
+      jobDescriptionKey: jobDescription,
+      companyNameKey: companyName,
+      companyAddressKey: companyAddress,
+      startDateKey: Timestamp.fromDate(startDate),
+      endDateKey: Timestamp.fromDate(endDate),
     };
   }
 
@@ -62,7 +66,8 @@ class WorkExperience {
 
   String toJson() => json.encode(toMap());
 
-  factory WorkExperience.fromJson(String source) => WorkExperience.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory WorkExperience.fromJson(String source) =>
+      WorkExperience.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -72,23 +77,22 @@ class WorkExperience {
   @override
   bool operator ==(covariant WorkExperience other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.jobRole == jobRole &&
-      other.jobDescription == jobDescription &&
-      other.companyName == companyName &&
-      other.companyAddress == companyAddress &&
-      other.startDate == startDate &&
-      other.endDate == endDate;
+
+    return other.jobRole == jobRole &&
+        other.jobDescription == jobDescription &&
+        other.companyName == companyName &&
+        other.companyAddress == companyAddress &&
+        other.startDate == startDate &&
+        other.endDate == endDate;
   }
 
   @override
   int get hashCode {
     return jobRole.hashCode ^
-      jobDescription.hashCode ^
-      companyName.hashCode ^
-      companyAddress.hashCode ^
-      startDate.hashCode ^
-      endDate.hashCode;
+        jobDescription.hashCode ^
+        companyName.hashCode ^
+        companyAddress.hashCode ^
+        startDate.hashCode ^
+        endDate.hashCode;
   }
 }

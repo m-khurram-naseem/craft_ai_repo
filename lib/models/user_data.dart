@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:craft_ai/models/skill.dart';
+import 'package:craft_ai/models/tool.dart';
 import 'package:flutter/foundation.dart';
 import 'package:craft_ai/models/education.dart';
 import 'package:craft_ai/models/language.dart';
@@ -6,9 +8,10 @@ import 'package:craft_ai/models/link.dart';
 import 'package:craft_ai/models/work_experience.dart';
 
 class UserData {
-  static const nameKey = 'userName',
+  static const nameKey = 'name',
       designationKey = 'designation',
       emailKey = 'email',
+      summaryKey = 'summary',
       phoneNoKey = 'phoneNo',
       addressKey = 'address',
       profileImageKey = 'profileImage',
@@ -22,10 +25,11 @@ class UserData {
   String designation;
   String email;
   String phoneNo;
+  String summary;
   String address;
   String profileImage;
-  List<String> skills;
-  List<String> tools;
+  List<Skill> skills;
+  List<Tool> tools;
   List<WorkExperience> workExperience;
   List<Education> education;
   List<Language> languages;
@@ -36,6 +40,7 @@ class UserData {
     required this.email,
     required this.phoneNo,
     required this.address,
+    required this.summary,
     required this.profileImage,
     required this.skills,
     required this.tools,
@@ -51,9 +56,10 @@ class UserData {
     String? email,
     String? phoneNo,
     String? address,
+    String? summary,
     String? profileImage,
-    List<String>? skills,
-    List<String>? tools,
+    List<Skill>? skills,
+    List<Tool>? tools,
     List<WorkExperience>? workExperience,
     List<Education>? education,
     List<Language>? languages,
@@ -63,15 +69,16 @@ class UserData {
       name: name ?? this.name,
       designation: designation ?? this.designation,
       email: email ?? this.email,
+      summary: summary ?? this.summary,
       phoneNo: phoneNo ?? this.phoneNo,
       address: address ?? this.address,
       profileImage: profileImage ?? this.profileImage,
-      skills: skills ?? this.skills,
-      tools: tools ?? this.tools,
-      workExperience: workExperience ?? this.workExperience,
-      education: education ?? this.education,
-      languages: languages ?? this.languages,
-      links: links ?? this.links,
+      skills: skills ?? [...this.skills],
+      tools: tools ?? [...this.tools],
+      workExperience: workExperience ?? [...this.workExperience],
+      education: education ?? [...this.education],
+      languages: languages ?? [...this.languages],
+      links: links ?? [...this.links],
     );
   }
 
@@ -80,17 +87,19 @@ class UserData {
       nameKey: name,
       designationKey: designation,
       emailKey: email,
+      summaryKey : summary,      
       phoneNoKey: phoneNo,
       addressKey: address,
       profileImageKey: profileImage,
-      skillsKey: skills,
-      toolsKey: tools,
+      skillsKey: skills.map((x) => x.toMap(),).toList(),
+      toolsKey: tools.map((x) => x.toMap(),).toList(),
       workExperienceKey: workExperience.map((x) => x.toMap()).toList(),
       educationKey: education.map((x) => x.toMap()).toList(),
       languageKey: languages.map((x) => x.toMap()).toList(),
       linksKey: links.map((x) => x.toMap()).toList(),
     };
   }
+
 
   factory UserData.fromMap(Map<String, dynamic> map) {
     return UserData(
@@ -99,9 +108,14 @@ class UserData {
       email: (map[emailKey] ?? '') as String,
       phoneNo: (map[phoneNoKey] ?? '') as String,
       address: (map[addressKey] ?? '') as String,
+      summary: (map[summaryKey] ?? '') as String,
       profileImage: (map[profileImageKey] ?? '') as String,
-      skills: List<String>.from(((map[skillsKey] ?? []) as List<dynamic>)),
-      tools: List<String>.from(((map[toolsKey] ?? []) as List<dynamic>)),
+      skills: ((map[skillsKey] ?? []) as List)
+              .map((e) => Skill.fromMap(e))
+              .toList(),
+      tools: ((map[toolsKey] ?? []) as List)
+              .map((e) => Tool.fromMap(e))
+              .toList(),
       workExperience:
           ((map[workExperienceKey] ?? []) as List)
               .map((e) => WorkExperience.fromMap(e))

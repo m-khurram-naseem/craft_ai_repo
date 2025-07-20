@@ -1,4 +1,5 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/models/tool.dart';
 import 'package:craft_ai/utils/comman_widgets/no_data_found_widget.dart';
 import 'package:craft_ai/views/skills_detail_screen/widgets/skill_detail_tile.dart';
 import 'package:craft_ai/views/tools_detail_edit_screen/tools_detail_edit_screen.dart';
@@ -10,7 +11,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ToolsDetailScreen extends StatelessWidget {
   final String title;
-  final List<String> tools;
+  final List<Tool> tools;
   const ToolsDetailScreen({
     super.key,
     required this.title,
@@ -98,7 +99,7 @@ class ToolsDetailList extends ConsumerWidget {
           slivers: [
             for (var i = 0; i < userData.tools.length; i++)
               SkillDetailTile(
-                title: userData.tools[i],
+                title: userData.tools[i].name,
                 onEditTap: () {
                   Navigator.of(context).push(
                     CupertinoPageRoute(

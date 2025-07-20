@@ -1,15 +1,18 @@
-
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Education {
-  static const degreeNameKey = 'degreeName' , instituteNameKey = 'institueName' , instituteAddressKey = 'instituteAddress' , startDateKey = 'degreeStartDate' , endDateKey = 'degreeEndDate';
+  static const degreeNameKey = 'degreeName',
+      instituteNameKey = 'institueName',
+      instituteAddressKey = 'instituteAddress',
+      startDateKey = 'degreeStartDate',
+      endDateKey = 'degreeEndDate';
   String degreeName;
   String instituteName;
   String instituteAddress;
   DateTime startDate;
-  DateTime endDate;  
+  DateTime endDate;
   Education({
     required this.degreeName,
     required this.instituteName,
@@ -28,7 +31,7 @@ class Education {
     return Education(
       degreeName: degreeName ?? this.degreeName,
       instituteName: instituteName ?? this.instituteName,
-      instituteAddress: instituteLocation ?? this.instituteAddress,
+      instituteAddress: instituteLocation ?? instituteAddress,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
     );
@@ -36,11 +39,11 @@ class Education {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-          degreeNameKey : degreeName,
-          instituteNameKey : instituteName,
-          instituteAddressKey : instituteAddress,
-          startDateKey : Timestamp.fromDate(startDate),
-          endDateKey : Timestamp.fromDate(endDate)
+      degreeNameKey: degreeName,
+      instituteNameKey: instituteName,
+      instituteAddressKey: instituteAddress,
+      startDateKey: Timestamp.fromDate(startDate),
+      endDateKey: Timestamp.fromDate(endDate),
     };
   }
 
@@ -56,7 +59,8 @@ class Education {
 
   String toJson() => json.encode(toMap());
 
-  factory Education.fromJson(String source) => Education.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Education.fromJson(String source) =>
+      Education.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -66,21 +70,20 @@ class Education {
   @override
   bool operator ==(covariant Education other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.degreeName == degreeName &&
-      other.instituteName == instituteName &&
-      other.instituteAddress == instituteAddress &&
-      other.startDate == startDate &&
-      other.endDate == endDate;
+
+    return other.degreeName == degreeName &&
+        other.instituteName == instituteName &&
+        other.instituteAddress == instituteAddress &&
+        other.startDate == startDate &&
+        other.endDate == endDate;
   }
 
   @override
   int get hashCode {
     return degreeName.hashCode ^
-      instituteName.hashCode ^
-      instituteAddress.hashCode ^
-      startDate.hashCode ^
-      endDate.hashCode;
+        instituteName.hashCode ^
+        instituteAddress.hashCode ^
+        startDate.hashCode ^
+        endDate.hashCode;
   }
 }

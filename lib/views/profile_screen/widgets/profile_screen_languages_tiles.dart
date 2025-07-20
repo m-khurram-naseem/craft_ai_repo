@@ -1,3 +1,4 @@
+import 'package:craft_ai/views/language_detail_edit_screen/widgets/language_detail_fluency_field.dart';
 import 'package:craft_ai/views/profile_screen/widgets/profile_screen_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -33,13 +34,3 @@ class ProfileScreenLanguagesTile extends StatelessWidget {
   }
 }
 
-
-String getFluencyFromIndex(int i){
-  return switch(i){
-    0 => 'Beginner' , 
-    1 => 'Proficient',
-    2 => 'Fluent',
-    3 => 'Native',
-    _ => '',
-  };
-}

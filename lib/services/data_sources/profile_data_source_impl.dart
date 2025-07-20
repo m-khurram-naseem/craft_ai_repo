@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craft_ai/models/education.dart';
 import 'package:craft_ai/models/language.dart';
 import 'package:craft_ai/models/link.dart';
+import 'package:craft_ai/models/skill.dart';
+import 'package:craft_ai/models/tool.dart';
 import 'package:craft_ai/models/user_data.dart';
 import 'package:craft_ai/models/work_experience.dart';
 import 'package:craft_ai/services/data_sources/profile_data_source.dart';
@@ -46,16 +48,16 @@ class ProfileDataSourceImpl extends ProfileDataSource {
   }
 
   @override
-  Future<void> addSkills(List<String> skills) {
+  Future<void> addSkills(List<Skill> skills) {
     return firestore.doc(userId).set({
-      UserData.skillsKey: skills,
+      UserData.skillsKey: skills.map((e) => e.toMap(),).toList(),
     }, SetOptions(merge: true));
   }
 
   @override
-  Future<void> addTools(List<String> tools) {
+  Future<void> addTools(List<Tool> tools) {
     return firestore.doc(userId).set({
-      UserData.toolsKey: tools,
+      UserData.toolsKey: tools.map((e) => e.toMap(),).toList(),
     }, SetOptions(merge: true));
   }
   

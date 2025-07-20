@@ -1,5 +1,5 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
-import 'package:craft_ai/controllers/profile_state_notifier/profile_states.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_states.dart';
 import 'package:craft_ai/models/education.dart';
 import 'package:craft_ai/views/education_detail_edit_screen/widgets/education_detail_field.dart';
 import 'package:craft_ai/views/education_detail_edit_screen/widgets/education_detail_save_btn.dart';
@@ -56,7 +56,7 @@ class _EducationDetailEditScreenState
     endDateController = TextEditingController(
       text: education != null ? dateFormat.format(education.endDate) : null,
     );
-    if(education != null){
+    if (education != null) {
       startDate = education.startDate;
       endDate = education.endDate;
     }
@@ -110,6 +110,26 @@ class _EducationDetailEditScreenState
           widget.isUpdate ? 'Update Education' : 'Add Education',
           style: TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.bold),
         ),
+        actions: [
+          if (widget.currentIndex != null)
+            GestureDetector(
+              onTap: () {
+                var updatedEducation = [...widget.eduacation];
+                updatedEducation.remove(updatedEducation[widget.currentIndex!]);
+                ref
+                    .read(profileStateNotifierProvider.notifier)
+                    .addEducation(updatedEducation);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  'assets/icons/delete.png',
+                  width: 22,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+        ],
       ),
       body: Center(
         child: Stack(

@@ -1,7 +1,12 @@
 import 'package:craft_ai/models/education.dart';
+import 'package:craft_ai/models/language.dart';
+import 'package:craft_ai/models/link.dart';
+import 'package:craft_ai/models/skill.dart';
+import 'package:craft_ai/models/tool.dart';
 import 'package:craft_ai/models/user_data.dart';
 import 'package:craft_ai/models/work_experience.dart';
 import 'package:craft_ai/views/education_detail_screen/education_detail_screen.dart';
+import 'package:craft_ai/views/language_detail_screen/language_detail_screen.dart';
 import 'package:craft_ai/views/links_detail_screen/links_detail_screen.dart';
 import 'package:craft_ai/views/personal_info_edit_screen/personal_info_edit_screen.dart';
 import 'package:craft_ai/views/skills_detail_screen/skills_detail_screen.dart';
@@ -118,7 +123,7 @@ class ProfileScreenEducationText extends StatelessWidget {
 
 class ProfileScreenSkillsText extends StatelessWidget {
   static const title = 'Skills';
-  final List<String> skills;
+  final List<Skill> skills;
   const ProfileScreenSkillsText({super.key, required this.skills});
 
   @override
@@ -139,23 +144,23 @@ class ProfileScreenSkillsText extends StatelessWidget {
 
 class ProfileScreenLanguagesText extends StatelessWidget {
   static const title = 'Languages';
-  final bool isEdit;
-  const ProfileScreenLanguagesText({super.key, required this.isEdit});
+  final List<Language> languages;
+  const ProfileScreenLanguagesText({super.key, required this.languages});
 
   @override
   Widget build(BuildContext context) {
     return ProfileScreenText(
       text: title,
-      isEdit: isEdit,
+      isEdit: languages.isNotEmpty,
       onEditTap:
           () {
-            // Navigator.of(context).push(
-            // CupertinoPageRoute(
-            //   builder:
-            //       (context) =>
-            //           LanguageDetailScreen(title: title, languages: ),
-            // ),
-          // );
+            Navigator.of(context).push(
+            CupertinoPageRoute(
+              builder:
+                  (context) =>
+                      LanguageDetailScreen(title: title, languages: languages),
+            ),
+          );
           },
     );
   }
@@ -163,18 +168,18 @@ class ProfileScreenLanguagesText extends StatelessWidget {
 
 class ProfileScreenLinksText extends StatelessWidget {
   static const title = 'Social Links';
-  final bool isEdit;
-  const ProfileScreenLinksText({super.key, required this.isEdit});
+  final List<Link> links;
+  const ProfileScreenLinksText({super.key, required this.links});
 
   @override
   Widget build(BuildContext context) {
     return ProfileScreenText(
       text: title,
-      isEdit: isEdit,
+      isEdit: links.isNotEmpty,
       onEditTap:
           () => Navigator.of(context).push(
             CupertinoPageRoute(
-              builder: (context) => LinksDetailScreen(title: title),
+              builder: (context) => LinksDetailScreen(title: title , links: links,),
             ),
           ),
     );
@@ -183,7 +188,7 @@ class ProfileScreenLinksText extends StatelessWidget {
 
 class ProfileScreenToolsText extends StatelessWidget {
   static const title = 'Tools';
-  final List<String> tools;
+  final List<Tool> tools;
   const ProfileScreenToolsText({super.key, required this.tools});
 
   @override

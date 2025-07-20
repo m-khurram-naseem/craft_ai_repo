@@ -1,5 +1,6 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
 import 'package:craft_ai/models/user_data.dart';
+import 'package:craft_ai/views/links_detail_edit_screen/widgets/link_detail_fluency_field.dart';
 import 'package:craft_ai/views/profile_screen/widgets/profile_screen_education_tiles.dart';
 import 'package:craft_ai/views/profile_screen/widgets/profile_screen_image.dart';
 import 'package:craft_ai/views/profile_screen/widgets/profile_screen_languages_tiles.dart';
@@ -18,7 +19,7 @@ class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {    
     var asyncValue = ref.watch(profileStreamProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -101,20 +102,20 @@ class ProfileScreenLoadedBody extends StatelessWidget {
         ProfileScreenToolsGrid(tools: userData.tools),
 
         // Languages Block
-        ProfileScreenLanguagesText(isEdit: userData.languages.isNotEmpty),
+        ProfileScreenLanguagesText(languages: userData.languages),
         for (var i = 0; i < userData.languages.length; i++)
           ProfileScreenLanguagesTile(
             language: userData.languages[i].name,
-            fluency: userData.languages[i].proficiency,
+            fluency: userData.languages[i].fluency,
             isTopRounded: i == 0,
             isBottomRounded: i == userData.languages.length - 1,
           ),
 
         // Links Block
-        ProfileScreenLinksText(isEdit: userData.links.isNotEmpty),
+        ProfileScreenLinksText(links: userData.links),
         for (var i = 0; i < userData.links.length; i++)
           ProfileScreenSocialLinksTile(
-            title: userData.links[i].name,
+            title: getLinkNameFromIndex(userData.links[i].name),
             link: userData.links[i].url,
             isTopRounded: i == 0,
             isBottomRounded: i == userData.links.length - 1,

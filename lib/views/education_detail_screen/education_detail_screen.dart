@@ -1,4 +1,4 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
 import 'package:craft_ai/models/education.dart';
 import 'package:craft_ai/utils/comman_widgets/no_data_found_widget.dart';
 import 'package:craft_ai/views/education_detail_edit_screen/education_detail_edit_screen.dart';

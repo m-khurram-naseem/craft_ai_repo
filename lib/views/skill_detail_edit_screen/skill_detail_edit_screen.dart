@@ -1,5 +1,6 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
-import 'package:craft_ai/controllers/profile_state_notifier/profile_states.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_states.dart';
+import 'package:craft_ai/models/skill.dart';
 import 'package:craft_ai/views/skill_detail_edit_screen/widgets/skill_detail_edit_field.dart';
 import 'package:craft_ai/views/skill_detail_edit_screen/widgets/skill_detail_save_btn.dart';
 import 'package:craft_ai/views/skill_detail_edit_screen/widgets/skill_detail_text.dart';
@@ -9,12 +10,18 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SkillDetailEditScreen extends ConsumerStatefulWidget {
   final bool isUpdate;
-  final List<String> skills;
+  final List<Skill> skills;
   final int? currentIndex;
-  const SkillDetailEditScreen({super.key, required this.isUpdate , required this.skills , this.currentIndex,});
+  const SkillDetailEditScreen({
+    super.key,
+    required this.isUpdate,
+    required this.skills,
+    this.currentIndex,
+  });
 
   @override
-  ConsumerState<SkillDetailEditScreen> createState() => _SkillDetailEditScreenState();
+  ConsumerState<SkillDetailEditScreen> createState() =>
+      _SkillDetailEditScreenState();
 }
 
 class _SkillDetailEditScreenState extends ConsumerState<SkillDetailEditScreen> {
@@ -22,11 +29,11 @@ class _SkillDetailEditScreenState extends ConsumerState<SkillDetailEditScreen> {
   bool isDialogShown = false;
 
   @override
-  void initState() {   
+  void initState() {
     super.initState();
     String? skill;
-    if(widget.currentIndex != null){
-      skill = widget.skills[widget.currentIndex!];
+    if (widget.currentIndex != null) {
+      skill = widget.skills[widget.currentIndex!].name;
     }
     skillController = TextEditingController(text: skill);
   }
@@ -39,7 +46,7 @@ class _SkillDetailEditScreenState extends ConsumerState<SkillDetailEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(profileStateNotifierProvider , (previous, next) {
+    ref.listen(profileStateNotifierProvider, (previous, next) {
       if (next is ProfileLoadingState) {
         if (!isDialogShown) {
           isDialogShown = true;
@@ -68,33 +75,57 @@ class _SkillDetailEditScreenState extends ConsumerState<SkillDetailEditScreen> {
           isDialogShown = false;
         }
       }
-    },onError: (error, stackTrace) {
-      
-    },);
+    }, onError: (error, stackTrace) {});
     return Scaffold(
       appBar: AppBar(
         title: Text(
           widget.isUpdate ? 'Update Skill' : 'Add Skill',
           style: TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.bold),
         ),
+        actions: [
+          if (widget.currentIndex != null)
+            GestureDetector(
+              onTap: () {
+                var updatedSkills = [...widget.skills];
+                updatedSkills.remove(updatedSkills[widget.currentIndex!]);
+                ref
+                    .read(profileStateNotifierProvider.notifier)
+                    .addSkills(updatedSkills);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  'assets/icons/delete.png',
+                  width: 22,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+        ],
       ),
+
       body: Center(
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
             CustomScrollView(
-              slivers: [SkillDetailText(), SkillDetailEditField(controller: skillController,)],
+              slivers: [
+                SkillDetailText(),
+                SkillDetailEditField(controller: skillController),
+              ],
             ),
-            SkillDetailSaveBtn(onPressed: () {
-              var notifier = ref.read(profileStateNotifierProvider.notifier);
-              List<String> skills = widget.skills;
-              if(widget.currentIndex == null){
-                skills.add(skillController.text.trim());
-              }else{                
-                skills[widget.currentIndex!] = skillController.text.trim();                
-              }
-              notifier.addSkills(skills);
-            },),
+            SkillDetailSaveBtn(
+              onPressed: () {
+                var notifier = ref.read(profileStateNotifierProvider.notifier);
+                List<Skill> skills = widget.skills;
+                if (widget.currentIndex == null) {
+                  skills.add(Skill(name: skillController.text.trim()));
+                } else {
+                  skills[widget.currentIndex!] = Skill(name: skillController.text.trim());
+                }
+                notifier.addSkills(skills);
+              },
+            ),
           ],
         ),
       ),

@@ -1,15 +1,26 @@
+import 'package:craft_ai/controllers/pdf_controller/pdf_providers.dart';
 import 'package:craft_ai/views/home_screen/home_screen_search_bar.dart';
+import 'package:craft_ai/views/home_screen/widgets/home_screen_list.dart';
 import 'package:craft_ai/views/resume_templates_screen/resume_templates_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(pdfStateProvider.notifier).fetchAllPdfs();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -25,39 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SliverPadding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
-                  sliver: SliverGrid.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 0.8,
-                    mainAxisSpacing: 20,
-                    children: [
-                      for (var i = 0; i < 5; i++)
-                        Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.onSecondary,
-                              borderRadius: BorderRadius.circular(15),
-                              
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage(
-                                  'assets/images/demo_resume.png',
-                                ),
-                              ),                            
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                  sliver: HomeScreenFilesList(),
                 ),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ResumeTemplatesScreen(templates: []),));
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ResumeTemplatesScreen(templates: []),
+                ),
+              );
             },
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
             foregroundColor: Theme.of(context).colorScheme.surface,

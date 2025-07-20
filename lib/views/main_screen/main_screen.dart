@@ -45,15 +45,15 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
         actions: [
-          if (currentIndex == 0)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                // Icons.grid_view_outlined,
-                Icons.view_agenda_outlined,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
+          // if (currentIndex == 0)
+          //   Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Icon(
+          //       // Icons.grid_view_outlined,
+          //       Icons.view_agenda_outlined,
+          //       color: Theme.of(context).colorScheme.primary,
+          //     ),
+          //   ),
           if (currentIndex == 0)
             Padding(
               padding: const EdgeInsets.all(8.0),

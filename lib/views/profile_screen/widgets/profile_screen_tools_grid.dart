@@ -1,14 +1,15 @@
+import 'package:craft_ai/models/tool.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreenToolsGrid extends StatelessWidget {
-  final List<String> tools;
+  final List<Tool> tools;
   const ProfileScreenToolsGrid({super.key , required this.tools});
 
   @override
   Widget build(BuildContext context) {
     var updatedTools = [...tools];
     if(updatedTools.length.isOdd){
-      updatedTools.add('');
+      updatedTools.add(Tool(name: ''));
     }
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -16,7 +17,7 @@ class ProfileScreenToolsGrid extends StatelessWidget {
         delegate: SliverChildListDelegate([
           for (var i = 0; i < updatedTools.length; i++)
             ProfileScreenToolsTile(
-              skillName: updatedTools[i],
+              skillName: updatedTools[i].name,
               index: i,
               noOfTools: updatedTools.length,
             ),

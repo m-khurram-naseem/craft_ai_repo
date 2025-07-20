@@ -1,5 +1,5 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
-import 'package:craft_ai/controllers/profile_state_notifier/profile_states.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_states.dart';
 import 'package:craft_ai/models/user_data.dart';
 import 'package:craft_ai/views/personal_info_edit_screen/widgets/personal_info_fields.dart';
 import 'package:craft_ai/views/personal_info_edit_screen/widgets/personal_info_save_btn.dart';
@@ -28,6 +28,7 @@ class _PersonalInfoEditScreenState
 
   late TextEditingController nameController,
       designationController,
+      summaryController,
       emailController,
       phoneNoController,
       addressController;
@@ -42,6 +43,7 @@ class _PersonalInfoEditScreenState
     emailController = TextEditingController(text: widget.userData.email);
     phoneNoController = TextEditingController(text: widget.userData.phoneNo);
     addressController = TextEditingController(text: widget.userData.address);
+    summaryController = TextEditingController(text: widget.userData.summary);
   }
 
   @override
@@ -51,6 +53,7 @@ class _PersonalInfoEditScreenState
     emailController.dispose();
     phoneNoController.dispose();
     addressController.dispose();
+    summaryController.dispose();
     super.dispose();
   }
 
@@ -109,6 +112,11 @@ class _PersonalInfoEditScreenState
                   hint: 'Enter your designation here...',
                   controller: designationController,
                 ),
+                PersonalInfoText(text: 'Professional Summary'),
+                PersonalInfoField(
+                  hint: 'Enter your professional summary here...',
+                  controller: summaryController,
+                ),
                 PersonalInfoText(text: 'Email'),
                 PersonalInfoField(
                   hint: 'Enter your email here...',
@@ -138,6 +146,7 @@ class _PersonalInfoEditScreenState
                         email: emailController.text.trim(),
                         phoneNo: phoneNoController.text.trim(),
                         address: addressController.text.trim(),
+                        summary: summaryController.text.trim(),
                       ),
                     );
               },

@@ -1,8 +1,10 @@
 
-import 'package:craft_ai/controllers/profile_state_notifier/profile_states.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_states.dart';
 import 'package:craft_ai/models/education.dart';
 import 'package:craft_ai/models/language.dart';
 import 'package:craft_ai/models/link.dart';
+import 'package:craft_ai/models/skill.dart';
+import 'package:craft_ai/models/tool.dart';
 import 'package:craft_ai/models/user_data.dart';
 import 'package:craft_ai/models/work_experience.dart';
 import 'package:craft_ai/services/data_sources/profile_data_source.dart';
@@ -42,7 +44,7 @@ class ProfileScreenStateNotifier extends StateNotifier<ProfileState>{
     }
   }
 
-  addSkills(List<String> skills) async{
+  addSkills(List<Skill> skills) async{
     try{
       state = ProfileLoadingState();
     await profileDataSource.addSkills(skills);    
@@ -52,7 +54,7 @@ class ProfileScreenStateNotifier extends StateNotifier<ProfileState>{
     }
   }
 
-  addTools(List<String> tools) async{
+  addTools(List<Tool> tools) async{
     try{
       state = ProfileLoadingState();
     await profileDataSource.addTools(tools);    

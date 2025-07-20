@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 class LanguageDetailFluencyField extends StatelessWidget {
-  const LanguageDetailFluencyField({super.key});
+  final ValueChanged<int?> onChanged;
+  final int selectedValue;
+  const LanguageDetailFluencyField({super.key , required this.onChanged , required this.selectedValue});
 
   @override
   Widget build(BuildContext context) {
@@ -8,16 +11,17 @@ class LanguageDetailFluencyField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12),
       sliver: SliverToBoxAdapter(
         child: DropdownButtonFormField(
+          
           items: [
-            DropdownMenuItem(value: 'b', child: Text('Beginner')),
-            DropdownMenuItem(value: 'n', child: Text('Native')),
-            DropdownMenuItem(value: 'f', child: Text('Fluent')),
-            DropdownMenuItem(value: 'i', child: Text('Intermediate')),
+            DropdownMenuItem(value: 0, child: Text(getFluencyFromIndex(0))),
+            DropdownMenuItem(value: 1, child: Text(getFluencyFromIndex(1))),
+            DropdownMenuItem(value: 2, child: Text(getFluencyFromIndex(2))),
+            DropdownMenuItem(value: 3, child: Text(getFluencyFromIndex(3))),
           ],
           dropdownColor: Theme.of(context).colorScheme.onSecondary,
           isExpanded: true,
-          value: 'b',
-          onChanged: (value) {},
+          value: selectedValue,
+          onChanged: onChanged,
           style: TextStyle(
             fontFamily: 'Urbanist',
             color: Theme.of(context).colorScheme.surface,
@@ -47,4 +51,16 @@ class LanguageDetailFluencyField extends StatelessWidget {
       ),
     );
   }
+}
+
+
+
+String getFluencyFromIndex(int i){
+  return switch(i){
+    0 => 'Beginner' , 
+    1 => 'Intermediate',
+    2 => 'Fluent',
+    3 => 'Native',
+    _ => '',
+  };
 }

@@ -1,5 +1,5 @@
-import 'package:craft_ai/controllers/profile_state_notifier/profile_providers.dart';
-import 'package:craft_ai/controllers/profile_state_notifier/profile_states.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_providers.dart';
+import 'package:craft_ai/controllers/profile_controller/profile_states.dart';
 import 'package:craft_ai/models/work_experience.dart';
 import 'package:craft_ai/views/work_experience_edit_screen/widgets/work_experience_field.dart';
 import 'package:craft_ai/views/work_experience_edit_screen/widgets/work_experience_save_btn.dart';
@@ -29,7 +29,7 @@ class _WorkExpreicneEditScreenState
     extends ConsumerState<WorkExpreicneEditScreen> {
   DateTime startDate = DateTime.now(), endDate = DateTime.now();
   DateFormat dateFormat = DateFormat('MMMM dd, yyyy');
-    bool isDialogShown = false;
+  bool isDialogShown = false;
   late TextEditingController jobDesignationController,
       jobDescriptionController,
       companyNameController,
@@ -47,7 +47,9 @@ class _WorkExpreicneEditScreenState
     jobDesignationController = TextEditingController(
       text: currentExperience?.jobRole,
     );
-    jobDescriptionController = TextEditingController(text: currentExperience?.jobDescription);
+    jobDescriptionController = TextEditingController(
+      text: currentExperience?.jobDescription,
+    );
     companyNameController = TextEditingController(
       text: currentExperience?.companyName,
     );
@@ -66,7 +68,7 @@ class _WorkExpreicneEditScreenState
               ? dateFormat.format(currentExperience.endDate)
               : null,
     );
-    if(currentExperience != null){
+    if (currentExperience != null) {
       startDate = currentExperience.startDate;
       endDate = currentExperience.endDate;
     }
@@ -85,7 +87,7 @@ class _WorkExpreicneEditScreenState
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(profileStateNotifierProvider , (previous, next) {
+    ref.listen(profileStateNotifierProvider, (previous, next) {
       if (next is ProfileLoadingState) {
         if (!isDialogShown) {
           isDialogShown = true;
@@ -114,15 +116,35 @@ class _WorkExpreicneEditScreenState
           isDialogShown = false;
         }
       }
-    },onError: (error, stackTrace) {
-      
-    },);
+    }, onError: (error, stackTrace) {});
     return Scaffold(
       appBar: AppBar(
         title: Text(
           widget.isUpdate ? 'Update Experience' : 'Add Experience',
           style: TextStyle(fontFamily: 'Urbanist', fontWeight: FontWeight.bold),
         ),
+        actions: [
+          if (widget.currentIndex != null)
+            GestureDetector(
+              onTap: () {
+                var updatedWorkExperience = [...widget.workExperiences];
+                updatedWorkExperience.remove(
+                  updatedWorkExperience[widget.currentIndex!],
+                );
+                ref
+                    .read(profileStateNotifierProvider.notifier)
+                    .addWorkExperience(updatedWorkExperience);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
+                  'assets/icons/delete.png',
+                  width: 22,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+        ],
       ),
       body: Center(
         child: Stack(
